@@ -62,7 +62,10 @@ def image_with_table(name, rows, out, title, crop=None):
 def main():
     strip(["drop_0", "drop_1"], ["시작: 1 m 위 (빨강 e=0, 노랑 e=0.5, 파랑 e=0.9)", "0.8초 뒤: 첫 바운드 이후"], "l03_drop.png")
     strip(["parallel"], ["Go2 16대 (env_0 ~ env_15), 1.5 m 간격"], "l03_parallel.png", width=11)
-    strip(["cartpole_0"], ["학습한 정책: 16개 역진자가 막대를 세우고 있다 (시작 2초 뒤)"], "l05_play.png", width=11)
+    strip(["pendulum_kit_0"], ["PinkLAB 회전형 역진자 키트 (assets/pinklab_pendulum)"], "l04_kit.png", width=11)
+    strip(["pendulum_0"], ["학습한 정책: 16개 키트가 진자를 세우고 있다 (시작 2초 뒤)"], "l05_play.png", width=11)
+    strip([f"pendulum_balance_{k}" for k in range(6)], [f"{t:.1f} s" for t in (0, 0.1, 0.2, 0.3, 0.5, 1.0)],
+          "l05_balance.png", cols=6, crop=(400, 40, 880, 620))
     strip(["stand"], ["왼쪽부터 kp 25 · kp 5 · kp 0, 떨어뜨리고 2초 뒤"], "l06_stand.png", width=13)
     strip(["go2_play_0"], ["16대가 각자 받은 명령을 따라 걷는다 (초록 화살표 = 명령, 파랑 = 실제 속도)"], "l08_play.png", width=12)
     strip([f"go2_forward_{k}" for k in range(4)], ["1.0 s", "1.4 s", "1.8 s", "2.2 s"], "l08_video.png",

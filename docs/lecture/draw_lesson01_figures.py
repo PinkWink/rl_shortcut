@@ -17,7 +17,7 @@ def overview():
     fig, ax = fig_ax(16, 3.4)
     chain(ax, [("환경 설정", ["~/rl_shortcut", "Isaac Sim 5.1 · Isaac Lab 2.3"]),
                ("물리엔진", ["USD · PhysX", "로봇 4096 대 병렬"]),
-               ("역진자", ["강화학습 첫 환경", "PPO 18초"]),
+               ("역진자", ["강화학습 첫 환경", "PPO 약 20초"]),
                ("Unitree Go2", ["USD 에서 시작", "속도 명령 따라 걷기"]),
                ("Unitree G1", ["모션 모방: 걷기", "→ 이소룡 쿵푸"])],
           0.8, 2.1, colors=[C["grey"], C["blue"], C["yellow"], C["teal"], C["red"]], tfs=12, fs=9.8)
@@ -38,8 +38,8 @@ def il_vs_rl():
 
 
 def results():
-    names = ["cartpole_0", "go2_play_0", "g1_play_walk_3", "g1_play_bruce_lee_4"]
-    caps = ["역진자: 막대 세우기", "Go2: 속도 명령 따라 걷기", "G1: 사람처럼 걷기", "G1: 이소룡 쿵푸"]
+    names = ["pendulum_0", "go2_play_0", "g1_play_walk_3", "g1_play_bruce_lee_4"]
+    caps = ["역진자: PinkLAB 키트 세우기", "Go2: 속도 명령 따라 걷기", "G1: 사람처럼 걷기", "G1: 이소룡 쿵푸"]
     fig = plt.figure(figsize=(16, 3.0), dpi=150)
     for k, (n, cap) in enumerate(zip(names, caps)):
         ax = fig.add_subplot(1, 4, k + 1)

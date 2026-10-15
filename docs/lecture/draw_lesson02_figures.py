@@ -36,16 +36,17 @@ def install_flow():
 
 
 def folders():
-    fig, ax = fig_ax(16, 5.4)
+    fig, ax = fig_ax(16, 6.0)
     rows = [("~/rl_shortcut/", "작업 폴더 = 이 과정의 git 저장소", C["blue"]),
             ("  .venv/", "Python 3.11 venv: PyTorch · Isaac Sim · Isaac Lab (약 18 GB)", C["purple"]),
             ("  IsaacLab/", "Isaac Lab 2.3.2 소스 (⑥ 에서 git clone)", C["teal"]),
-            ("  rl_shortcut/", "환경 코드: cartpole_env · go2_env · g1_env · motion · ppo", C["yellow"]),
+            ("  rl_shortcut/", "환경 코드: pendulum_env · go2_env · g1_env · motion · ppo", C["yellow"]),
             ("  scripts/", "실행 파일: train · play · 물리 실험 · Go2 · G1 확인", C["yellow"]),
-            ("  motions/ · checkpoints/", "G1 레퍼런스 동작 2개 · 미리 학습한 정책 4개", C["green"]),
+            ("  assets/ · motions/", "PinkLAB 역진자 키트 (URDF · USD) · G1 레퍼런스 동작 2개", C["green"]),
+            ("  checkpoints/ · tools/", "미리 학습한 정책 4개 · 모델 · 동작 변환 도구", C["green"]),
             ("  logs/<실험>/<날짜_시각>/", "학습할 때 생기는 체크포인트 · TensorBoard 기록", C["grey"])]
     for i, (name, what, fc) in enumerate(rows):
-        y = 4.55 - i * 0.66
+        y = 5.15 - i * 0.66
         rbox(ax, 0.3, y, 5.4, 0.54, name, fc=fc, tfs=10.5, lw=1.0)
         rbox(ax, 5.9, y, 9.8, 0.54, what, fc="white", tfs=10, lw=1.0)
     note(ax, 0.3, 0.2, ".venv/ · IsaacLab/ · logs/ 는 .gitignore 에 있어 git 에 올라가지 않습니다.")
@@ -53,23 +54,24 @@ def folders():
 
 
 def scripts_map():
-    fig, ax = fig_ax(16, 6.3)
+    fig, ax = fig_ax(16, 7.0)
     rows = [("check_install.py", "버전 · GPU · 물리 100 스텝 확인", "②", C["green"]),
             ("physics_drop.py", "공 3개 낙하: 반발 계수 · dt", "③", C["blue"]),
             ("physics_parallel.py", "Go2 N 대 병렬 물리 속도", "③", C["blue"]),
-            ("train.py --task cartpole | go2 | g1", "PPO 학습 → logs/<실험>/", "⑤⑧⑨⑩", C["purple"]),
+            ("pendulum_check.py", "키트 진자 흔들림 주기 vs 이론", "④", C["teal"]),
+            ("train.py --task pendulum | go2 | g1", "PPO 학습 → logs/<실험>/", "⑤⑧⑨⑩", C["purple"]),
             ("play.py --task ...", "학습한 정책 실행 · 평가 · 영상", "⑤⑧⑨⑩", C["purple"]),
             ("go2_inspect.py", "go2.usd 의 링크 · 관절 · 순서", "⑥", C["yellow"]),
             ("go2_stand.py", "PD 모터로 서 있기 (kp 비교)", "⑥", C["yellow"]),
             ("g1_motion.py", "G1 레퍼런스 동작 재생", "⑨⑩", C["red"])]
     for i, (name, what, page, fc) in enumerate(rows):
-        y = 5.45 - i * 0.68
+        y = 6.13 - i * 0.68
         rbox(ax, 0.3, y, 6.4, 0.56, name, fc=fc, tfs=10.5, lw=1.0)
         rbox(ax, 6.9, y, 6.9, 0.56, what, fc="white", tfs=10, lw=1.0)
         rbox(ax, 14.0, y, 1.7, 0.56, page, fc=C["grey"], tfs=10.5, lw=1.0)
-    note(ax, 0.3, 6.2, "scripts/ 아래 스크립트", bold=True, color=INK, fs=11)
-    note(ax, 6.9, 6.2, "하는 일", bold=True, color=INK, fs=11)
-    note(ax, 14.0, 6.2, "페이지", bold=True, color=INK, fs=11)
+    note(ax, 0.3, 6.88, "scripts/ 아래 스크립트", bold=True, color=INK, fs=11)
+    note(ax, 6.9, 6.88, "하는 일", bold=True, color=INK, fs=11)
+    note(ax, 14.0, 6.88, "페이지", bold=True, color=INK, fs=11)
     save(fig, "l02_scripts_map.png")
 
 

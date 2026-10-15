@@ -18,7 +18,7 @@ def setup():
             ("prompt", "git clone https://github.com/PinkWink/rl_shortcut.git .", "pw@laptop:~/rl_shortcut$ "),
             ("out", "Cloning into '.'..."),
             ("prompt", "ls", "pw@laptop:~/rl_shortcut$ "),
-            ("out", "checkpoints  docs  motions  pyproject.toml  README.md  rl_shortcut  scripts  tools")],
+            ("out", "assets  checkpoints  docs  motions  pyproject.toml  README.md  rl_shortcut  scripts  tools")],
            "l02_t_clone.png", prompt="pw@laptop:~$ ", title="pw@laptop: ~ — bash", highlight=("checkpoints",))
     render([("prompt", "python3.11 -m venv .venv && source .venv/bin/activate"),
             ("prompt", "pip install torch==2.7.0 torchvision==0.22.0 --index-url https://download.pytorch.org/whl/cu128"),
@@ -71,29 +71,40 @@ def physics():
            "l03_t_drop_dt.png", prompt=V, highlight=("fall 0.420", "0.241"))
 
 
-def cartpole():
+def pendulum_check():
+    render([("prompt", "python scripts/pendulum_check.py --headless"),
+            ("out", "joints: ['base_to_arm', 'arm_to_pendulum']"),
+            ("out", "links: base 500.0 g, arm 36.0 g, pendulum 16.0 g"),
+            ("out", "joint limits (rad): [(-2.36, 2.36), (-3.4028234663852886e+38, 3.4028234663852886e+38)]"),
+            ("out", "arm held, swing from 30 deg: period 0.607 s (theory with the arm held 0.597 s), arm moved up to 0.0 deg"),
+            ("prompt", "python scripts/pendulum_check.py --headless --free_arm"),
+            ("out", "arm free, swing from 30 deg: period 0.491 s (theory with the arm held 0.597 s), arm moved up to 24.7 deg")],
+           "l04_t_check.png", prompt=V, highlight=("period 0.607", "period 0.491"))
+
+
+def pendulum():
     render([("out", "                      Learning iteration 149/150"),
-            ("out", "                       Computation: 603609 steps/s (collection: 0.078s, learning 0.030s)"),
-            ("out", "             Mean action noise std: 0.09"),
-            ("out", "                       Mean reward: 4.71"),
-            ("out", "               Mean episode length: 287.52"),
-            ("out", "              Episode_Reward/alive: 0.9367"),
-            ("out", "        Episode_Reward/terminating: -0.0006"),
-            ("out", "       Episode_Reward/pole_upright: -0.0099"),
-            ("out", "      Episode_Termination/time_out: 0.9181"),
-            ("out", "      Episode_Termination/cart_out: 0.0821"),
-            ("out", "                    Iteration time: 0.11s"),
-            ("out", "                      Time elapsed: 00:00:16"),
-            ("out", "[train] done in 0.3 min -> /home/pw/rl_shortcut/logs/cartpole/2026-10-15_16-11-06")],
+            ("out", "                       Computation: 665389 steps/s (collection: 0.066s, learning 0.032s)"),
+            ("out", "             Mean action noise std: 0.00"),
+            ("out", "                       Mean reward: 4.98"),
+            ("out", "               Mean episode length: 500.00"),
+            ("out", "              Episode_Reward/alive: 1.0000"),
+            ("out", "       Episode_Reward/pole_upright: -0.0008"),
+            ("out", "         Episode_Reward/arm_center: -0.0012"),
+            ("out", "      Episode_Termination/time_out: 1.0000"),
+            ("out", "     Episode_Termination/pole_fell: 0.0000"),
+            ("out", "                    Iteration time: 0.10s"),
+            ("out", "                      Time elapsed: 00:00:15"),
+            ("out", "[train] done in 0.3 min -> /home/pw/rl_shortcut/logs/pendulum/2026-10-15_19-44-27")],
            "l05_t_train.png", prompt=V, highlight=("Mean episode length", "time_out", "[train] done"))
-    render([("prompt", "python scripts/play.py --task cartpole --headless --seconds 5"),
-            ("out", "[play] /home/pw/rl_shortcut/logs/cartpole/2026-10-15_16-11-06/model_149.pt"),
-            ("out", "[play] t=  1 s  fails=  0  pole angle 0.123 rad"),
-            ("out", "[play] t=  2 s  fails=  1  pole angle 0.078 rad"),
-            ("out", "[play] t=  3 s  fails=  1  pole angle 0.059 rad"),
-            ("out", "[play] t=  4 s  fails=  1  pole angle 0.031 rad"),
-            ("out", "[play] t=  5 s  fails=  1  pole angle 0.024 rad"),
-            ("out", "[play] 5 s x 16 envs: fails=1, pole angle 0.063 rad")],
+    render([("prompt", "python scripts/play.py --task pendulum --headless --seconds 5"),
+            ("out", "[play] /home/pw/rl_shortcut/logs/pendulum/2026-10-15_19-44-27/model_149.pt"),
+            ("out", "[play] t=  1 s  fails=  0  pendulum angle from upright 0.027 rad"),
+            ("out", "[play] t=  2 s  fails=  0  pendulum angle from upright 0.003 rad"),
+            ("out", "[play] t=  3 s  fails=  0  pendulum angle from upright 0.000 rad"),
+            ("out", "[play] t=  4 s  fails=  0  pendulum angle from upright 0.000 rad"),
+            ("out", "[play] t=  5 s  fails=  0  pendulum angle from upright 0.001 rad"),
+            ("out", "[play] 5 s x 16 envs: fails=0, pendulum angle from upright 0.006 rad")],
            "l05_t_play.png", prompt=V, highlight=("5 s x 16 envs",))
 
 
@@ -227,5 +238,5 @@ def g1_bruce():
 
 
 if __name__ == "__main__":
-    for f in (setup, physics, cartpole, go2, g1_motion, g1_walk, g1_bruce):
+    for f in (setup, physics, pendulum_check, pendulum, go2, g1_motion, g1_walk, g1_bruce):
         f()

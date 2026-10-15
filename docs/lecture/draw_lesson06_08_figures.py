@@ -48,15 +48,15 @@ def task():
     save(fig, "l07_task.png")
 
 
-def vs_cartpole():
+def vs_pendulum():
     fig, ax = fig_ax(16, 4.6)
     rows = [("", "역진자 (④⑤)", "Go2 (⑦⑧)"),
             ("명령 (Commands)", "없음", "속도 명령 3개, 10초마다 새로"),
-            ("행동", "힘 1개 (카트)", "관절 목표 12개 (기본 자세 + 0.25 × 행동)"),
+            ("행동", "토크 1개 (팔 모터)", "관절 목표 12개 (기본 자세 + 0.25 × 행동)"),
             ("관측", "4개", "48개 (몸 상태 + 명령 + 관절 + 직전 행동, 잡음 포함)"),
-            ("보상", "막대 세우기", "명령 따라가기 + 걸음새 + 감점 6가지"),
+            ("보상", "진자 세우기", "명령 따라가기 + 걸음새 + 감점 6가지"),
             ("센서 · 무작위화", "없음", "발 접촉 센서 · 마찰 · 몸통 질량"),
-            ("학습", "4096 환경, 150 it, 18초", "4096 환경, 300 it, 2.7분")]
+            ("학습", "4096 환경, 150 it, 약 20초", "4096 환경, 300 it, 2.7분")]
     x, w = [0.3, 4.2, 8.0], [3.7, 3.6, 7.7]
     for i, r in enumerate(rows):
         y = 3.95 - i * 0.62
@@ -65,7 +65,7 @@ def vs_cartpole():
                 continue
             fc = [C["grey"], C["yellow"], C["blue"]][j] if i == 0 or j == 0 else "white"
             rbox(ax, x[j], y, w[j], 0.52, t, fc=fc, tfs=10.5, lw=1.0)
-    save(fig, "l07_vs_cartpole.png")
+    save(fig, "l07_vs_pendulum.png")
 
 
 def obs():
@@ -155,5 +155,5 @@ def progress():
 
 
 if __name__ == "__main__":
-    for f in (pd, task, vs_cartpole, obs, rewards, exp_shape, sweep, progress):
+    for f in (pd, task, vs_pendulum, obs, rewards, exp_shape, sweep, progress):
         f()

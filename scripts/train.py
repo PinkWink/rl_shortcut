@@ -1,18 +1,18 @@
 """Train a policy with PPO (RSL-RL).
 
-  python scripts/train.py --task cartpole
+  python scripts/train.py --task pendulum --headless
   python scripts/train.py --task go2 --headless
   python scripts/train.py --task g1 --motion walk --headless
   python scripts/train.py --task g1 --motion bruce_lee --headless --max_iterations 1000
 
-Checkpoints: logs/<experiment>/<date_time>/model_<iteration>.pt (experiment = cartpole, go2, g1_walk, ...)
+Checkpoints: logs/<experiment>/<date_time>/model_<iteration>.pt (experiment = pendulum, go2, g1_walk, ...)
 """
 import argparse
 
 from isaaclab.app import AppLauncher
 
 p = argparse.ArgumentParser()
-p.add_argument("--task", required=True, choices=["cartpole", "go2", "g1"])
+p.add_argument("--task", required=True, choices=["pendulum", "go2", "g1"])
 p.add_argument("--motion", default="walk", help="g1 only: motions/<motion>.npz")
 p.add_argument("--num_envs", type=int, default=None)
 p.add_argument("--max_iterations", type=int, default=None)

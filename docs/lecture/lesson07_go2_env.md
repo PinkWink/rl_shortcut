@@ -10,7 +10,7 @@
 
 ### 역진자와 무엇이 달라졌나
 
-![역진자 → Go2](l07_vs_cartpole.png){width=1000}
+![역진자 → Go2](l07_vs_pendulum.png){width=1000}
 
 ## 2. 코드: rl_shortcut/go2_env.py
 

@@ -1,12 +1,12 @@
 """Run a trained policy and print how well it does.
 
-  python scripts/play.py --task cartpole
+  python scripts/play.py --task pendulum
   python scripts/play.py --task go2 --cmd 1.0 0.0 0.0           # walk forward at 1 m/s
   python scripts/play.py --task g1 --motion walk
   python scripts/play.py --task g1 --motion bruce_lee --checkpoint g1_walk   # walking policy, kung fu clip
   python scripts/play.py --task go2 --headless --enable_cameras --video outputs/go2.mp4 --seconds 10
 
---checkpoint: a .pt path or an experiment name (cartpole, go2, g1_walk, g1_bruce_lee).
+--checkpoint: a .pt path or an experiment name (pendulum, go2, g1_walk, g1_bruce_lee).
 By name it takes the newest logs/<name>/*/model_*.pt, else the shipped checkpoints/<name>.pt.
 """
 import argparse
@@ -14,7 +14,7 @@ import argparse
 from isaaclab.app import AppLauncher
 
 p = argparse.ArgumentParser()
-p.add_argument("--task", required=True, choices=["cartpole", "go2", "g1"])
+p.add_argument("--task", required=True, choices=["pendulum", "go2", "g1"])
 p.add_argument("--motion", default="walk", help="g1 only: motions/<motion>.npz")
 p.add_argument("--checkpoint", default=None)
 p.add_argument("--num_envs", type=int, default=16)
@@ -107,14 +107,14 @@ class Report:
             from rl_shortcut.g1_env import ref
             r = ref(self.env)
             return (robot.data.joint_pos[:, r.ids] - r.motion.dof[r.frame(self.env)]).square().mean().sqrt()
-        return robot.data.joint_pos[:, 1].abs().mean()   # cartpole: |pole angle|
+        return (robot.data.joint_pos[:, 1] - torch.pi).abs().mean()   # pendulum: |angle from upright|
 
     def text(self, x):
         if self.args.task == "go2":
             return f"vx {x[0]:+.2f} m/s  vy {x[1]:+.2f} m/s  wz {x[2]:+.2f} rad/s"
         if self.args.task == "g1":
             return f"joint error {float(x):.3f} rad"
-        return f"pole angle {float(x):.3f} rad"
+        return f"pendulum angle from upright {float(x):.3f} rad"
 
     def final(self):
         print(f"[play] {self.step / self.steps_per_s:.0f} s x {self.env.num_envs} envs: fails={self.falls}, "

@@ -82,7 +82,7 @@ def dt():
     note(ax, x0 + 20 * step + 0.3, 1.75, "물리 200 Hz (dt 0.005 s)", color=BLUE, fs=11, bold=True)
     note(ax, x0 + 20 * step + 0.3, 2.65, "정책 50 Hz", color=RED, fs=11, bold=True)
     note(ax, 0.6, 0.95, "decimation = 4 : 정책이 행동을 한 번 내면, 물리가 4 스텝 진행한 뒤 다음 관측을 받습니다.", fs=10.5)
-    note(ax, 0.6, 0.45, "역진자는 dt 1/120 s · decimation 2 (정책 60 Hz), Go2 · G1 은 dt 0.005 s · decimation 4 (정책 50 Hz).", fs=10.5)
+    note(ax, 0.6, 0.45, "역진자는 dt 0.005 s · decimation 2 (정책 100 Hz), Go2 · G1 은 dt 0.005 s · decimation 4 (정책 50 Hz).", fs=10.5)
     save(fig, "l03_dt.png")
 
 

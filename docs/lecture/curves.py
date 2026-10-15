@@ -1,7 +1,7 @@
 """Learning curves from a TensorBoard log (logs/<experiment>/<run>/events.out.tfevents.*).
 
 Run with the course venv (tensorboard is installed there):
-  .venv/bin/python docs/lecture/curves.py cartpole l05_curve.png Train/mean_reward Train/mean_episode_length
+  .venv/bin/python docs/lecture/curves.py pendulum l05_curve.png Train/mean_reward Train/mean_episode_length
 """
 import sys
 from pathlib import Path
