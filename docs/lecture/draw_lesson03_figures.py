@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from figstyle import BLUE, GREY, INK, RED, C, arrow, fig_ax, note, rbox, save  # noqa: E402
 
 # measured with scripts/physics_parallel.py --headless (RTX 5060 Ti, 500 steps of 0.005 s)
-PARALLEL = [(1, 855), (64, 791), (1024, 627), (4096, 310)]
+PARALLEL = [(1, 853), (64, 797), (1024, 626), (4096, 311)]
 
 
 def stack():

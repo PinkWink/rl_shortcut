@@ -38,7 +38,7 @@ def il_vs_rl():
 
 
 def results():
-    names = ["cartpole_0", "go2_play_0", "g1_play_walk_3", "g1_play_bruce_lee_2"]
+    names = ["cartpole_0", "go2_play_0", "g1_play_walk_3", "g1_play_bruce_lee_4"]
     caps = ["역진자: 막대 세우기", "Go2: 속도 명령 따라 걷기", "G1: 사람처럼 걷기", "G1: 이소룡 쿵푸"]
     fig = plt.figure(figsize=(16, 3.0), dpi=150)
     for k, (n, cap) in enumerate(zip(names, caps)):
@@ -97,5 +97,5 @@ def timetable():
 if __name__ == "__main__":
     for f in (overview, il_vs_rl, curriculum, timetable):
         f()
-    if (RAW / "g1_play_bruce_lee_2.png").exists():
+    if (RAW / "g1_play_bruce_lee_4.png").exists():
         results()

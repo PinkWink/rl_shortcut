@@ -131,6 +131,44 @@ def walk_progress():
     save(fig, "l09_progress.png")
 
 
+# play.py --seconds 12 --num_envs 64: (policy, clip) -> (falls, joint error rad)
+COMPARE = {("walk", "walk"): (0, 0.074), ("walk", "bruce_lee"): (930, 0.441),
+           ("bruce_lee", "bruce_lee"): (0, 0.198), ("bruce_lee", "walk"): (967, 0.259)}
+BRUCE_PROGRESS = [(300, 21, 0.427), (500, 2, 0.393), (1000, 3, 0.307), (2000, 0, 0.250), (2999, 0, 0.198)]
+
+
+def compare():
+    fig, ax = fig_ax(16, 4.4)
+    rbox(ax, 0.3, 3.0, 4.2, 0.7, "정책 ↓   레퍼런스 →", fc=C["grey"], tfs=11)
+    rbox(ax, 4.7, 3.0, 5.3, 0.7, "걷기 (walk)", fc=C["teal"], tfs=11.5)
+    rbox(ax, 10.2, 3.0, 5.5, 0.7, "쿵푸 (bruce_lee)", fc=C["red"], tfs=11.5)
+    for i, pol in enumerate(["walk", "bruce_lee"]):
+        y = 1.95 - i * 1.0
+        rbox(ax, 0.3, y, 4.2, 0.85, {"walk": "걷기 정책 (⑨)", "bruce_lee": "쿵푸 정책 (⑩)"}[pol], fc=C["grey"], tfs=11)
+        for j, clip in enumerate(["walk", "bruce_lee"]):
+            falls, err = COMPARE[(pol, clip)]
+            ok = falls == 0
+            rbox(ax, [4.7, 10.2][j], y, [5.3, 5.5][j], 0.85,
+                 f"넘어짐 {falls}회  ·  관절 오차 {err:.3f} rad ({err * 57.3:.0f}°)",
+                 fc=C["green"] if ok else C["red"], tfs=10.5, lw=1.0)
+    note(ax, 0.3, 0.45, "play.py: 64 대 × 12초, 매 에피소드는 레퍼런스의 무작위 순간에서 시작 (RSI).", fs=10.5)
+    save(fig, "l10_compare.png")
+
+
+def bruce_progress():
+    fig, ax = fig_ax(16, 4.2)
+    ax2 = fig.add_axes([0.07, 0.2, 0.55, 0.7])
+    its = [a for a, _, _ in BRUCE_PROGRESS]
+    ax2.plot(its, [c for _, _, c in BRUCE_PROGRESS], "o-", color="#C62828", lw=2)
+    for a, f, e in BRUCE_PROGRESS:
+        ax2.annotate(f"{e:.3f}  (넘어짐 {f})", (a, e), xytext=(6, 6), textcoords="offset points", fontsize=9.5)
+    ax2.set_xlabel("iteration (체크포인트)"); ax2.set_ylabel("관절 오차 RMS (rad)")
+    ax2.set_ylim(0, 0.5); ax2.grid(alpha=0.3); ax2.spines[["top", "right"]].set_visible(False)
+    rbox(ax, 10.6, 0.9, 5.1, 2.6, "쿵푸: 체크포인트별", ["64대 · 12초", "500 it 부터 거의 넘어지지 않음",
+                                                      "자세는 3000 it 까지 계속 좋아짐"], fc=C["red"], align="left", dy=0.5)
+    save(fig, "l10_progress.png")
+
+
 if __name__ == "__main__":
-    for f in (why_mimic, mimic, motions, obs, rewards, rsi, flow10, walk_progress):
+    for f in (why_mimic, mimic, motions, obs, rewards, rsi, flow10, walk_progress, compare, bruce_progress):
         f()

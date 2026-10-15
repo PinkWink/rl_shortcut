@@ -20,7 +20,7 @@ TITLE = "pw@laptop: ~/rl_shortcut — bash"
 
 
 def render(lines, name, title=TITLE, highlight=(), prompt=PROMPT):
-    """lines: ("prompt", command) or ("out", text). Lines containing a highlight string are yellow."""
+    """lines: ("prompt", command[, prompt]) or ("out", text). Lines containing a highlight string are yellow."""
     W, LH = 14.0, 0.36
     H = LH * len(lines) + 1.0
     fig, ax = plt.subplots(figsize=(W, H), dpi=150); ax.set_xlim(0, W); ax.set_ylim(0, H); ax.axis("off")
@@ -32,9 +32,10 @@ def render(lines, name, title=TITLE, highlight=(), prompt=PROMPT):
         ax.add_patch(plt.Circle((0.4 + i * 0.28, H - 0.32), 0.08, fc=c, ec="none"))
     ax.text(W / 2, H - 0.32, title, ha="center", va="center", fontsize=9, color="#BBBBBB", family=SANS)
     y = H - 0.95
-    for kind, text in lines:
+    for line in lines:
+        kind, text = line[0], line[1]
         if kind == "prompt":
-            t = ax.text(0.35, y, prompt, va="center", fontsize=9.6, color="#5FD75F", family=MONO)
+            t = ax.text(0.35, y, line[2] if len(line) > 2 else prompt, va="center", fontsize=9.6, color="#5FD75F", family=MONO)
             fig.canvas.draw()
             x1 = ax.transData.inverted().transform((t.get_window_extent().x1, 0))[0]
             ax.text(x1, y, text, va="center", fontsize=9.6, color="#FFFFFF", family=MONO)

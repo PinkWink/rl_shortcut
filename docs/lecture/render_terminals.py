@@ -13,6 +13,13 @@ LAB = "(.venv) pw@laptop:~/rl_shortcut/IsaacLab$ "
 
 
 def setup():
+    render([("prompt", "mkdir -p ~/rl_shortcut"),
+            ("prompt", "cd ~/rl_shortcut"),
+            ("prompt", "git clone https://github.com/PinkWink/rl_shortcut.git .", "pw@laptop:~/rl_shortcut$ "),
+            ("out", "Cloning into '.'..."),
+            ("prompt", "ls", "pw@laptop:~/rl_shortcut$ "),
+            ("out", "checkpoints  docs  motions  pyproject.toml  README.md  rl_shortcut  scripts  tools")],
+           "l02_t_clone.png", prompt="pw@laptop:~$ ", title="pw@laptop: ~ — bash", highlight=("checkpoints",))
     render([("prompt", "python3.11 -m venv .venv && source .venv/bin/activate"),
             ("prompt", "pip install torch==2.7.0 torchvision==0.22.0 --index-url https://download.pytorch.org/whl/cu128"),
             ("out", "  Downloading nvidia_cudnn_cu12-9.7.1.26-py3-none-manylinux_2_27_x86_64.whl (726.9 MB)"),
@@ -192,6 +199,33 @@ def g1_walk():
            "l10_t_walk_on_bruce.png", prompt=V, highlight=("12 s x 64 envs",))
 
 
+def g1_bruce():
+    render([("out", "                     Learning iteration 2999/3000"),
+            ("out", "                       Mean reward: 106.88"),
+            ("out", "               Mean episode length: 597.63"),
+            ("out", "             Episode_Reward/joints: 3.1277"),
+            ("out", "               Episode_Reward/arms: 1.0370"),
+            ("out", "           Episode_Reward/velocity: 1.8272"),
+            ("out", "                Episode_Reward/yaw: 1.9582"),
+            ("out", "             Episode_Reward/height: 1.2019"),
+            ("out", "      Episode_Termination/time_out: 0.9898"),
+            ("out", "        Episode_Termination/tilted: 0.0078"),
+            ("out", "                    Iteration time: 0.79s"),
+            ("out", "[train] done in 43.6 min -> /home/pw/rl_shortcut/logs/g1_bruce_lee/2026-10-15_16-44-17")],
+           "l10_t_train.png", prompt=V, highlight=("joints", "time_out", "[train] done"))
+    render([("prompt", "python scripts/play.py --task g1 --motion bruce_lee --headless --seconds 12 --num_envs 64"),
+            ("out", "[play] /home/pw/rl_shortcut/logs/g1_bruce_lee/2026-10-15_16-44-17/model_2999.pt"),
+            ("out", "[play] t=  1 s  fails=  0  joint error 0.191 rad"),
+            ("out", "[play] t=  2 s  fails=  0  joint error 0.175 rad"),
+            ("out", "[play] t=  3 s  fails=  0  joint error 0.182 rad"),
+            ("out", "  ..."),
+            ("out", "[play] 12 s x 64 envs: fails=0, joint error 0.198 rad"),
+            ("prompt", "python scripts/play.py --task g1 --motion walk --checkpoint g1_bruce_lee --headless --seconds 12 --num_envs 64"),
+            ("out", "  ..."),
+            ("out", "[play] 12 s x 64 envs: fails=967, joint error 0.259 rad")],
+           "l10_t_play_bruce.png", prompt=V, highlight=("12 s x 64 envs",))
+
+
 if __name__ == "__main__":
-    for f in (setup, physics, cartpole, go2, g1_motion, g1_walk):
+    for f in (setup, physics, cartpole, go2, g1_motion, g1_walk, g1_bruce):
         f()
