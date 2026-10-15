@@ -1,0 +1,7 @@
+.venv/
+IsaacLab/
+logs/
+outputs/
+__pycache__/
+*.egg-info/
+docs/lecture/raw/

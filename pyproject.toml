@@ -1,0 +1,9 @@
+[project]
+name = "rl-shortcut"
+version = "0.1.0"
+description = "One-day Isaac Lab reinforcement learning course: cartpole, Unitree Go2, Unitree G1"
+requires-python = "==3.11.*"
+dependencies = []    # Isaac Sim 5.1.0 and Isaac Lab 2.3.2 are installed separately (lecture page 2)
+
+[tool.setuptools]
+packages = ["rl_shortcut"]
