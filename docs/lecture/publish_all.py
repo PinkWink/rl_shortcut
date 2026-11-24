@@ -14,6 +14,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 PARENT, SPACE = "3727785992", "2517565443"
 PAGES = [
+    ("lesson00_intro.md", "0. Intro: 강화학습 단기 과정 한눈에 보기 (Isaac Sim · Isaac Lab, 2일)"),
     ("lesson01_intro.md", "강화학습 단기 과정: 소개와 커리큘럼"),
     ("lesson02_setup.md", "환경 설정 (Ubuntu 24.04 / venv / Isaac Sim 5.1.0 / Isaac Lab 2.3.2)"),
     ("lesson03_physics.md", "Isaac Sim 물리엔진: USD · PhysX · GPU 병렬 시뮬레이션"),

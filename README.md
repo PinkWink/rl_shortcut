@@ -1,6 +1,6 @@
 # rl_shortcut
 
-A 1.5-day reinforcement learning course with NVIDIA Isaac Sim 5.1 and Isaac Lab 2.3:
+A two-day reinforcement learning course with NVIDIA Isaac Sim 5.1 and Isaac Lab 2.3:
 PinkLAB rotary inverted pendulum kit, Pinky Pro driving the City of Pink ring road from YOLO road segmentation, Unitree Go2 (from its USD to walking), Unitree G1 (motion imitation: walk, then Bruce Lee kung fu).
 
 The lecture (Korean) is on Confluence; its sources are in `docs/lecture/`.

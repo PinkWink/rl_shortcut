@@ -2,7 +2,7 @@
 # Usage: set -a; source <token env file>; set +a
 #   new page: python3 docs/lecture/publish_confluence.py <md> "<title>" <parentId> <spaceId> [png...]
 #   update:   python3 docs/lecture/publish_confluence.py <md> "<title>" --update <pageId> [png...]
-# Markdown: ## to #### headings, paragraphs, - / 1. lists, | tables |, ``` code, ![..](png){width=900}, **bold**, `code`,
+# Markdown: [text](https://...) links, ## to #### headings, paragraphs, - / 1. lists, | tables |, ``` code, ![..](png){width=900}, **bold**, `code`,
 #   :::info|tip|note|warning|panel Title ... ::: panels, :::cards(2|3) ::card Title ... ::: card columns
 import html
 import json
@@ -30,6 +30,7 @@ def inline(text):
     text = html.escape(text, quote=False)
     text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
     text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
+    text = re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+)\)", r'<a href="\2">\1</a>', text)
     return text
 
 

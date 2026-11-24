@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+<title>핑크랩 강화학습 단기 과정</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Layout: the scenes of the course video, top to bottom. Each theme = big number + title, bullets, then looping clips.
+   One dark look on purpose: the same screen as the video. */
+:root {
+  color-scheme: dark;
+  --bg: #121318; --panel: #1e2028; --line: #3c3f4b; --fg: #f5f5f7; --muted: #a0a4af; --pink: #ec70aa;
+  --c-base: #a0a4af; --c-physics: #78a0eb; --c-pendulum: #f0c86e; --c-pinky: #be96eb; --c-go2: #6ecdbe; --c-g1: #f08282;
+  --text: "Noto Sans KR", "NanumSquare", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --num: "Space Grotesk", "Noto Sans KR", sans-serif;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--text); font-size: 17px; line-height: 1.65; word-break: keep-all; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+section { padding-block: 56px; border-top: 1px solid var(--line); }
+h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.2; }
+h2 { font-size: clamp(1.7rem, 4vw, 2.6rem); font-weight: 900; }
+p { margin: 0; }
+a { color: var(--pink); text-underline-offset: 3px; }
+a:focus-visible, video:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+.pink { color: var(--pink); }
+.muted { color: var(--muted); }
+
+/* title */
+.top { border-top: 0; padding-block: 48px 40px; text-align: center; display: grid; gap: 22px; justify-items: center; }
+.logo { background: #fff; border-radius: 999px; padding: 14px 34px; display: inline-flex; }
+.logo img { height: 44px; width: auto; display: block; }
+.top h1 { font-size: clamp(2.4rem, 8vw, 5rem); font-weight: 900; letter-spacing: -0.02em; }
+.top .sub { font-size: clamp(1.1rem, 3vw, 1.7rem); }
+.top .robots { font-size: clamp(1rem, 2.6vw, 1.45rem); font-weight: 700; }
+.site { font-family: var(--num); font-weight: 700; color: var(--pink); font-size: 1.4rem; }
+.hero video { width: 100%; display: block; border: 1px solid var(--line); }
+.hero p { margin-top: 20px; font-size: clamp(1.15rem, 3.2vw, 1.9rem); font-weight: 700; text-align: center; }
+
+/* about */
+.about { display: grid; gap: 28px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); align-items: start; }
+.about ul, .theme ul, .need ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.about li, .theme li, .need li { padding-left: 22px; position: relative; }
+.about li::before, .theme li::before, .need li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 9px; height: 9px; border-radius: 50%; background: var(--pink); }
+.about strong { font-weight: 700; }
+
+/* curriculum */
+.head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 22px; margin-bottom: 28px; }
+.head .pink { font-size: 1.25rem; }
+.pages { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.pages a { display: flex; align-items: stretch; background: var(--panel); border-radius: 12px; overflow: hidden; color: var(--fg); text-decoration: none; min-width: 0; }
+.pages a:hover { background: #272a35; }
+.pages b { font-family: var(--num); font-size: 1.35rem; width: 62px; flex: none; display: grid; place-items: center; background: var(--k); color: var(--bg); }
+.pages span { padding: 13px 16px; min-width: 0; }
+
+/* themes */
+.theme .th { display: grid; grid-template-columns: auto 1fr; gap: 4px 22px; align-items: center; margin-bottom: 22px; }
+.theme .no { font-family: var(--num); font-weight: 700; font-size: clamp(3rem, 9vw, 5rem); line-height: 1; color: var(--pink); grid-row: span 2; }
+.pill { justify-self: start; border: 2px solid var(--pink); color: var(--pink); border-radius: 999px; padding: 1px 16px; font-size: 0.95rem; font-weight: 700; }
+.theme ul { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px 28px; margin-bottom: 26px; }
+.clips { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.clips.wide { grid-template-columns: 1fr; }
+figure { margin: 0; min-width: 0; }
+figure video, figure img { width: 100%; height: auto; display: block; background: var(--panel); border: 1px solid var(--line); }
+figcaption { margin-top: 8px; font-size: 0.95rem; color: var(--muted); }
+figcaption b { color: var(--fg); font-weight: 700; }
+.steps figcaption b { color: var(--pink); }
+
+/* schedule */
+.day { display: grid; gap: 10px; margin-bottom: 26px; }
+.day h3 { font-size: 1.5rem; font-weight: 900; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px; }
+.bar div { flex: var(--m) 1 0; min-width: 150px; background: var(--k); color: var(--bg); border-radius: 12px; padding: 20px 12px; text-align: center; font-weight: 700; }
+
+/* closing */
+.need { display: grid; gap: 28px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.need h2 { margin-bottom: 18px; }
+.repo { font-family: var(--num); font-weight: 700; font-size: clamp(1.15rem, 4.2vw, 2.2rem); overflow-wrap: anywhere; }
+.contact { text-align: center; display: grid; gap: 14px; justify-items: center; }
+.mail { font-family: var(--num); font-weight: 700; color: var(--pink); font-size: clamp(1.5rem, 6vw, 3.4rem); overflow-wrap: anywhere; user-select: all; }
+.contact .home { font-family: var(--num); font-weight: 700; font-size: clamp(1.4rem, 5vw, 2.8rem); color: var(--fg); }
+footer { padding-block: 26px 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; text-align: center; }
+</style>
+
+<div class="wrap">
+
+<section class="top">
+  <span class="logo"><img src="media/pinklab_logo.png" alt="PinkLAB"></span>
+  <h1>강화학습 단기 과정</h1>
+  <p class="sub">NVIDIA Isaac Sim · Isaac Lab 으로 2일</p>
+  <p class="robots">역진자 · Pinky Pro · Unitree Go2 · Unitree G1</p>
+  <a class="site" href="https://pinklab.art">pinklab.art</a>
+</section>
+
+<section class="hero">
+  <video src="media/hero.mp4" autoplay muted loop playsinline preload="metadata" aria-label="과정에 나오는 로봇 여섯 장면"></video>
+  <p>보상만 정해 주면, 로봇이 스스로 익히는 강화학습</p>
+</section>
+
+<section>
+  <div class="head"><h2>같은 틀을 점점 어려운 로봇에</h2></div>
+  <div class="about">
+    <ul>
+      <li>환경의 다섯 부분 + PPO 를 네 가지 로봇에 적용</li>
+      <li>환경의 다섯 부분 = 행동 · 관측 · 이벤트 · 보상 · 종료</li>
+      <li>설치부터 학습 · 평가까지, 터미널 명령 그대로</li>
+    </ul>
+    <ul>
+      <li><strong>학습 시간은 20초에서 40분까지</strong> (RTX 5060 Ti 실측)</li>
+      <li>기다리지 않도록 미리 학습한 정책 포함</li>
+      <li>결과는 숫자로 확인: 넘어진 횟수 · 속도 오차 · 관절 오차</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="head"><h2>커리큘럼</h2><span class="pink">12 페이지 · 2일</span></div>
+  <ol class="pages">
+    <li><a style="--k:var(--c-base)" href="https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3729620994"><b>01</b><span>소개 · 커리큘럼</span></a></li>
+    <li><a style="--k:var(--c-base)" href="https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3727884331"><b>02</b><span>환경 설정</span></a></li>
+    <li><a style="--k:var(--c-physics)" href="https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3729358868"><b>03</b><span>Isaac Sim 물리엔진</span></a></li>
+    <li><a style="--k:var(--c-pendulum)" href="https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3727884354"><b>04</b><span>역진자 (1) 환경 만들기</span></a></li>
+    <li><a style="--k:var(--c-pendulum)" href="https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3728932868"><b>05</b><span>역진자 (2) PPO 학습과 평가</span></a></li>
+    <li><a style="--k:var(--c-pinky)" href="https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3800072297"><b>06</b><span>Pinky Pro (1) YOLO 도로 인식</span></a></li>
+    <li><a style="--k:var(--c-pinky)" href="https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3799941285"><b>07</b><span>Pinky Pro (2) 순환 도로 주행</span></a></li>
+    <li><a style="--k:var(--c-go2)" href="https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3729686529"><b>08</b><span>Go2 (1) USD 에서 서기까지</span></a></li>
+    <li><a style="--k:var(--c-go2)" href="https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3727917081"><b>09</b><span>Go2 (2) 걷기 환경</span></a></li>
+    <li><a style="--k:var(--c-go2)" href="https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3729555473"><b>10</b><span>Go2 (3) 학습과 평가</span></a></li>
+    <li><a style="--k:var(--c-g1)" href="https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3728375881"><b>11</b><span>G1 (1) 모션 모방으로 걷기</span></a></li>
+    <li><a style="--k:var(--c-g1)" href="https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3728736307"><b>12</b><span>G1 (2) 이소룡 쿵푸</span></a></li>
+  </ol>
+</section>
+
+<section class="theme">
+  <div class="th"><span class="no">01</span><h2>환경 설정과 물리엔진</h2><span class="pill">1 ~ 3 페이지</span></div>
+  <ul>
+    <li>폴더 하나에 설치: Isaac Sim · Isaac Lab</li>
+    <li>USD 와 PhysX</li>
+    <li>GPU 에서 로봇 4096 대를 동시에</li>
+  </ul>
+  <div class="clips">
+    <figure><img src="media/drop.jpg" alt="공 세 개가 떨어지는 실험 화면"><figcaption><b>공 낙하 실험</b> · 반발 계수와 시간 간격 비교</figcaption></figure>
+    <figure><img src="media/parallel.jpg" alt="Go2 여러 대가 나란히 놓인 화면"><figcaption><b>병렬 물리</b> · 같은 로봇을 GPU 에서 한꺼번에</figcaption></figure>
+  </div>
+</section>
+
+<section class="theme">
+  <div class="th"><span class="no">02</span><h2>역진자: 첫 강화학습</h2><span class="pill">4 · 5 페이지</span></div>
+  <ul>
+    <li>PinkLAB 로터리 역진자 키트</li>
+    <li>환경의 다섯 부분: 행동 · 관측 · 이벤트 · 보상 · 종료</li>
+    <li>PPO 학습 약 20초</li>
+    <li>보상과 관측을 바꿔 보는 실험</li>
+  </ul>
+  <div class="clips">
+    <figure><video src="media/pendulum_kit.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>키트 1대</b> · 학습한 정책이 진자를 세움</figcaption></figure>
+    <figure><video src="media/pendulum_many.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>16대 동시에</b> · 기울어진 진자를 바로 세우기</figcaption></figure>
+  </div>
+</section>
+
+<section class="theme">
+  <div class="th"><span class="no">03</span><h2>역진자: 학습 과정</h2><span class="pill">5 페이지</span></div>
+  <ul>
+    <li>키트 4096 개가 동시에 연습</li>
+    <li>학습 전에는 곧바로 쓰러짐</li>
+    <li>40 iteration 쯤 세우는 법을 찾음</li>
+    <li>150 iteration 에 약 20초</li>
+  </ul>
+  <div class="clips steps">
+    <figure><video src="media/pendulum_it0.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>학습 전</b> · iteration 0</figcaption></figure>
+    <figure><video src="media/pendulum_it20.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>학습 중</b> · iteration 20</figcaption></figure>
+    <figure><video src="media/pendulum_it149.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>학습 후</b> · iteration 149</figcaption></figure>
+  </div>
+</section>
+
+<section class="theme">
+  <div class="th"><span class="no">04</span><h2>Pinky Pro: YOLO 도로 인식</h2><span class="pill">6 페이지</span></div>
+  <ul>
+    <li>작은 도시 핑크시티</li>
+    <li>카메라 영상과 정답을 자동으로 모으기</li>
+    <li>YOLO 세그먼테이션 학습 약 70초</li>
+    <li>도로 마스크를 8 × 16 칸의 도로 시야로</li>
+  </ul>
+  <div class="clips">
+    <figure><video src="media/pinky_city.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>핑크시티</b> · 순환 도로를 도는 Pinky Pro (2배속)</figcaption></figure>
+    <figure><img src="media/yolo_check.jpg" alt="카메라 영상, YOLO 도로 마스크, 도로 시야를 나란히 놓은 그림"><figcaption><b>YOLO 확인</b> · 카메라 | 도로 마스크 | 도로 시야 8 × 16</figcaption></figure>
+  </div>
+</section>
+
+<section class="theme">
+  <div class="th"><span class="no">05</span><h2>Pinky Pro: 강화학습으로 길 찾기</h2><span class="pill">7 페이지</span></div>
+  <ul>
+    <li>도로 시야만 보고 바퀴 속도를 결정</li>
+    <li>학습 전에는 곧 도로를 벗어남</li>
+    <li>50 iteration 이면 도로 안에서 달림</li>
+    <li>300 iteration 2.9분이면 오른쪽 차로 유지</li>
+  </ul>
+  <div class="clips steps">
+    <figure><video src="media/pinky_it0.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>학습 전</b> · iteration 0</figcaption></figure>
+    <figure><video src="media/pinky_it50.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>학습 중</b> · iteration 50</figcaption></figure>
+    <figure><video src="media/pinky_it299.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>학습 후</b> · iteration 299</figcaption></figure>
+  </div>
+</section>
+
+<section class="theme">
+  <div class="th"><span class="no">06</span><h2>Pinky Pro: 카메라 + YOLO 로 주행</h2><span class="pill">7 페이지</span></div>
+  <ul>
+    <li>학습은 카메라 없이 1024 대로</li>
+    <li>평가는 로봇 카메라 + YOLO 로</li>
+    <li>정책에게는 같은 모양의 관측</li>
+    <li>16대 30초: 도로 이탈 없음</li>
+  </ul>
+  <div class="clips wide">
+    <figure><video src="media/pinky_yolo.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>카메라 + YOLO</b> · 도시 · 로봇 카메라와 도로 마스크 · 도로 시야 (2배속)</figcaption></figure>
+    <figure><video src="media/pinky_train.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>16대 주행</b> · 도시마다 한 대씩 순환 도로를 돎 (1.5배속)</figcaption></figure>
+  </div>
+</section>
+
+<section class="theme">
+  <div class="th"><span class="no">07</span><h2>Unitree Go2: 4족 보행</h2><span class="pill">8 ~ 10 페이지</span></div>
+  <ul>
+    <li>USD 에서 서 있는 로봇까지</li>
+    <li>속도 명령을 따라 걷는 환경</li>
+    <li>4096 대로 2.7분 학습</li>
+    <li>명령한 속도와 실제 속도 비교</li>
+  </ul>
+  <div class="clips">
+    <figure><video src="media/go2_forward.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>앞으로 걷기</b> · 1.0 m/s 속도 명령</figcaption></figure>
+    <figure><video src="media/go2_play.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>16대</b> · 저마다 다른 속도 명령을 따라감</figcaption></figure>
+  </div>
+</section>
+
+<section class="theme">
+  <div class="th"><span class="no">08</span><h2>Unitree G1: 모션 모방</h2><span class="pill">11 · 12 페이지</span></div>
+  <ul>
+    <li>사람의 동작을 본보기로</li>
+    <li>앞으로 걷기</li>
+    <li>걷기 정책에게 쿵푸를 시키면?</li>
+    <li>이소룡 쿵푸 학습과 추론</li>
+  </ul>
+  <div class="clips">
+    <figure><video src="media/g1_walk.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>앞으로 걷기</b> · 걷기를 학습한 정책</figcaption></figure>
+    <figure><video src="media/g1_walk_on_bruce_lee.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>걷기 정책에게 쿵푸를</b> · 배운 적 없는 동작</figcaption></figure>
+    <figure><video src="media/g1_bruce_lee.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption><b>이소룡 쿵푸</b> · 쿵푸를 학습한 정책</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <div class="head"><h2>2일 일정</h2><span class="pink">예시</span></div>
+  <div class="day">
+    <h3>1일차</h3>
+    <div class="bar">
+      <div style="--m:120;--k:var(--c-base)">설치 · 물리엔진</div>
+      <div style="--m:70;--k:var(--c-pendulum)">역진자</div>
+      <div style="--m:140;--k:var(--c-pinky)">Pinky Pro 도로 인식 · 주행</div>
+      <div style="--m:50;--k:var(--c-go2)">Go2 USD</div>
+    </div>
+  </div>
+  <div class="day">
+    <h3>2일차</h3>
+    <div class="bar">
+      <div style="--m:90;--k:var(--c-go2)">Go2 걷기 환경 · 학습</div>
+      <div style="--m:100;--k:var(--c-g1)">G1 걷기 · 쿵푸</div>
+    </div>
+  </div>
+  <p>오래 걸리는 학습은 걸어 두고, 미리 학습한 정책(checkpoints/)으로 바로 평가</p>
+</section>
+
+<section class="need">
+  <div>
+    <h2>준비물</h2>
+    <ul>
+      <li>Ubuntu 24.04</li>
+      <li>NVIDIA RTX GPU (VRAM 8 GB 이상 권장)</li>
+      <li>NVIDIA Isaac Sim · Isaac Lab</li>
+      <li>모든 것을 폴더 하나(~/rl_shortcut)에 설치</li>
+    </ul>
+  </div>
+  <div>
+    <h2>코드와 학습된 정책 공개</h2>
+    <p><a class="repo" href="https://github.com/PinkWink/rl_shortcut">github.com/PinkWink/rl_shortcut</a></p>
+    <p class="muted" style="margin-top:12px">강의 자료의 명령을 그대로 따라 할 수 있음</p>
+  </div>
+</section>
+
+<section class="contact">
+  <span class="logo"><img src="media/pinklab_logo.png" alt="PinkLAB"></span>
+  <h2>이 과정을 수업하고 싶은 기관은 연락 주세요</h2>
+  <p class="mail">contact@pinklab.art</p>
+  <p class="muted">홈페이지</p>
+  <a class="home" href="https://pinklab.art">pinklab.art</a>
+</section>
+
+<footer>핑크랩 강화학습 단기 과정 · NVIDIA Isaac Sim + Isaac Lab</footer>
+
+</div>
+
+<script>
+// Play a clip only while it is on screen. With "reduce motion" on, clips wait for the viewer to press play.
+(function () {
+  var clips = document.querySelectorAll("video");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    clips.forEach(function (v) { v.removeAttribute("autoplay"); v.pause(); v.controls = true; });
+    return;
+  }
+  if (!("IntersectionObserver" in window)) return;
+  var watch = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { var p = e.target.play(); if (p && p.catch) p.catch(function () { e.target.controls = true; }); }
+      else e.target.pause();
+    });
+  }, { rootMargin: "200px" });
+  clips.forEach(function (v) { watch.observe(v); });
+})();
+</script>
+</body>
+</html>

@@ -2,9 +2,9 @@
 
 ### 한 줄 소개
 
-![1.5일 동안 만드는 것](l01_overview.png){width=1000}
+![2일 동안 만드는 것](l01_overview.png){width=1000}
 
-- NVIDIA **Isaac Sim** · **Isaac Lab** 으로 1.5일 동안 해 보는 **강화학습(Reinforcement Learning)**
+- NVIDIA **Isaac Sim** · **Isaac Lab** 으로 2일 동안 해 보는 **강화학습(Reinforcement Learning)**
 - 보상만 정해 주면 로봇이 시행착오로 스스로 동작을 익힘
 - 역진자(PinkLAB 키트) → 주행 로봇 **Pinky Pro** → 4족 Unitree **Go2** → 휴머노이드 Unitree **G1** · 같은 틀(환경 다섯 부분 + PPO)을 점점 어려운 로봇에 적용
 
@@ -26,7 +26,7 @@
 
 ![12 페이지의 흐름](l01_curriculum.png){width=1000}
 
-### 1.5일 일정 (예시)
+### 2일 일정 (예시)
 
 ![시간표](l01_timetable.png){width=1000}
 
