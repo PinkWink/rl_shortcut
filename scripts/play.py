@@ -1,6 +1,8 @@
 """Run a trained policy and print how well it does.
 
   python scripts/play.py --task pendulum
+  python scripts/play.py --task pinky --num_envs 16             # road view from the floor map (as in training)
+  python scripts/play.py --task pinky --num_envs 1 --perception yolo --enable_cameras   # from the camera + YOLO
   python scripts/play.py --task go2 --cmd 1.0 0.0 0.0           # walk forward at 1 m/s
   python scripts/play.py --task g1 --motion walk
   python scripts/play.py --task g1 --motion bruce_lee --checkpoint g1_walk   # walking policy, kung fu clip
@@ -14,8 +16,9 @@ import argparse
 from isaaclab.app import AppLauncher
 
 p = argparse.ArgumentParser()
-p.add_argument("--task", required=True, choices=["pendulum", "go2", "g1"])
+p.add_argument("--task", required=True, choices=["pendulum", "pinky", "go2", "g1"])
 p.add_argument("--motion", default="walk", help="g1 only: motions/<motion>.npz")
+p.add_argument("--perception", default="map", choices=["map", "yolo"], help="pinky only: where the road view comes from")
 p.add_argument("--checkpoint", default=None)
 p.add_argument("--num_envs", type=int, default=16)
 p.add_argument("--cmd", type=float, nargs=3, default=None, metavar=("VX", "VY", "WZ"), help="go2 only")
@@ -62,6 +65,8 @@ def main():
 
     report = Report(env, args)
     frames = []
+    for _ in range(60 if args.video else 0):      # textures load in the background: the first frames are black
+        env.render()
     obs = wrapped.get_observations()
     steps = int(args.seconds / env.step_dt) if args.seconds else None
     step = 0
@@ -70,7 +75,7 @@ def main():
             obs, _, dones, extras = wrapped.step(policy(obs))
         report.update(dones, extras)
         if args.video:
-            frames.append(env.render())
+            frames.append(frame(env))
         step += 1
     report.final()
     if args.video:
@@ -79,6 +84,15 @@ def main():
         imageio.mimsave(args.video, frames, fps=round(1 / env.step_dt))
         print(f"[play] saved {args.video} ({len(frames)} frames)")
     env.close()
+
+
+def frame(env):
+    """Video frame: the viewport; with --perception yolo also what the robot sees (camera + road mask, road view)."""
+    image = env.render()
+    if getattr(env.cfg, "perception", None) != "yolo":
+        return image
+    from rl_shortcut.road_seg import debug_panel
+    return debug_panel(env, image)
 
 
 class Report:
@@ -103,6 +117,9 @@ class Report:
         if self.args.task == "go2":       # measured forward, sideways and turning speed (mean of envs)
             v = robot.data.root_lin_vel_b[:, :2].mean(0)
             return torch.stack([v[0], v[1], robot.data.root_ang_vel_b[:, 2].mean()])
+        if self.args.task == "pinky":     # speed along the ring road, distance from the lane centre
+            from rl_shortcut.pinky_env import lane_error, progress
+            return torch.stack([progress(self.env).mean(), lane_error(self.env).abs().mean()])
         if self.args.task == "g1":        # RMS joint angle error to the clip
             from rl_shortcut.g1_env import ref
             r = ref(self.env)
@@ -112,6 +129,8 @@ class Report:
     def text(self, x):
         if self.args.task == "go2":
             return f"vx {x[0]:+.2f} m/s  vy {x[1]:+.2f} m/s  wz {x[2]:+.2f} rad/s"
+        if self.args.task == "pinky":
+            return f"speed {x[0]:.3f} m/s  lane error {x[1] * 100:.1f} cm"
         if self.args.task == "g1":
             return f"joint error {float(x):.3f} rad"
         return f"pendulum angle from upright {float(x):.3f} rad"

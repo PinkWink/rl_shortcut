@@ -28,7 +28,7 @@ def stack():
 
 def vs_mujoco():
     fig, ax = fig_ax(16, 5.0)
-    rows = [("", "앞 과정: MuJoCo 3.15", "오늘: Isaac Sim 5.1 + Isaac Lab"),
+    rows = [("", "앞 과정: MuJoCo 3.15", "이 과정: Isaac Sim 5.1 + Isaac Lab"),
             ("모델 파일", "MJCF (XML)", "USD (Pixar 장면 형식)"),
             ("물리 엔진", "MuJoCo (CPU)", "PhysX 5 (GPU)"),
             ("한 번에 돌리는 로봇", "1 대 (사람이 조작)", "수천 대 (정책이 연습)"),
@@ -81,7 +81,7 @@ def dt():
     ax.plot([x0, x0 + 20 * step], [1.75, 1.75], color=INK, lw=1)
     note(ax, x0 + 20 * step + 0.3, 1.75, "물리 200 Hz (dt 0.005 s)", color=BLUE, fs=11, bold=True)
     note(ax, x0 + 20 * step + 0.3, 2.65, "정책 50 Hz", color=RED, fs=11, bold=True)
-    note(ax, 0.6, 0.95, "decimation = 4 : 정책이 행동을 한 번 내면, 물리가 4 스텝 진행한 뒤 다음 관측을 받습니다.", fs=10.5)
+    note(ax, 0.6, 0.95, "decimation = 4 : 정책이 행동을 한 번 냄 → 물리 4 스텝 진행 → 다음 관측", fs=10.5)
     note(ax, 0.6, 0.45, "역진자는 dt 0.005 s · decimation 2 (정책 100 Hz), Go2 · G1 은 dt 0.005 s · decimation 4 (정책 50 Hz).", fs=10.5)
     save(fig, "l03_dt.png")
 

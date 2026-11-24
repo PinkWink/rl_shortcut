@@ -108,6 +108,70 @@ def pendulum():
            "l05_t_play.png", prompt=V, highlight=("5 s x 16 envs",))
 
 
+def pinky():
+    render([("prompt", "python scripts/pinky_dataset.py --headless --enable_cameras"),
+            ("out", "  ... (Isaac Sim 시작 로그) ..."),
+            ("out", "[dataset] 400 images -> /home/pw/rl_shortcut/datasets/pinky_road"),
+            ("out", "[dataset] 16 / 400"),
+            ("out", "  ..."),
+            ("out", "[dataset] 400 / 400"),
+            ("out", "[dataset] pixels: background 41.6 %, road 43.0 %, sidewalk 15.4 %"),
+            ("out", "[dataset] road view from the map vs from the camera labels: mean difference 0.010 (0 = same)")],
+           "l11_t_dataset.png", prompt=V, highlight=("400 / 400", "mean difference"))
+    render([("prompt", "python scripts/pinky_yolo.py"),
+            ("out", "  ..."),
+            ("out", "      Epoch    GPU_mem   box_loss   seg_loss   cls_loss   dfl_loss  Instances       Size"),
+            ("out", "      40/40      3.22G     0.3961      0.475     0.3136     0.8695         17        640: 100% 23/23 16.9it/s 1.4s"),
+            ("out", "40 epochs completed in 0.019 hours."),
+            ("out", "YOLO11n-seg summary (fused): 114 layers, 2,849,710 parameters, 0 gradients, 9.7 GFLOPs"),
+            ("out", "                   all         40        128      0.938      0.924      0.977      0.879       0.95      0.925       0.98      0.835"),
+            ("out", "Results saved to /home/pw/rl_shortcut/logs/pinky_yolo/2026-11-24_12-13-15"),
+            ("out", "[yolo] mask mAP50 0.977, mAP50-95 0.835"),
+            ("out", "[yolo] weights: /home/pw/rl_shortcut/logs/pinky_yolo/2026-11-24_12-13-15/weights/best.pt")],
+           "l11_t_yolo.png", prompt=V, highlight=("40 epochs completed", "[yolo] mask"))
+    render([("prompt", "python scripts/pinky_yolo.py --check"),
+            ("out", "[yolo] /home/pw/rl_shortcut/logs/pinky_yolo/2026-11-24_12-13-15/weights/best.pt"),
+            ("out", "[yolo] road IoU on 6 validation images: 0.980"),
+            ("out", "[yolo] saved /home/pw/rl_shortcut/outputs/pinky_yolo_check.jpg  (camera | road mask | road view 8 x 16)")],
+           "l11_t_check.png", prompt=V, highlight=("road IoU",))
+    render([("out", "[train] pinky: 1024 envs, observation 130, action 2"),
+            ("out", "  ..."),
+            ("out", "                      Learning iteration 299/300"),
+            ("out", "                       Computation: 55804 steps/s (collection: 0.552s, learning 0.035s)"),
+            ("out", "             Mean action noise std: 0.30"),
+            ("out", "                       Mean reward: 82.93"),
+            ("out", "               Mean episode length: 600.00"),
+            ("out", "           Episode_Reward/progress: 1.9164"),
+            ("out", "            Episode_Reward/in_lane: 0.8752"),
+            ("out", "        Episode_Reward/action_rate: -0.0271"),
+            ("out", "        Episode_Reward/terminating: 0.0000"),
+            ("out", "      Episode_Termination/time_out: 0.9973"),
+            ("out", "      Episode_Termination/off_road: 0.0027"),
+            ("out", "                    Iteration time: 0.59s"),
+            ("out", "                      Time elapsed: 00:02:55"),
+            ("out", "[train] done in 2.9 min -> /home/pw/rl_shortcut/logs/pinky/2026-11-24_12-21-44")],
+           "l12_t_train.png", prompt=V, highlight=("Mean episode length", "progress", "[train] done"))
+    render([("prompt", "python scripts/play.py --task pinky --headless --seconds 30"),
+            ("out", "[play] /home/pw/rl_shortcut/logs/pinky/2026-11-24_12-21-44/model_299.pt"),
+            ("out", "[play] t=  1 s  fails=  0  speed 0.201 m/s  lane error 1.5 cm"),
+            ("out", "[play] t=  2 s  fails=  0  speed 0.238 m/s  lane error 1.3 cm"),
+            ("out", "[play] t=  3 s  fails=  0  speed 0.246 m/s  lane error 2.3 cm"),
+            ("out", "  ..."),
+            ("out", "[play] t= 30 s  fails=  0  speed 0.234 m/s  lane error 2.9 cm"),
+            ("out", "[play] 30 s x 16 envs: fails=0, speed 0.240 m/s  lane error 2.4 cm")],
+           "l12_t_play.png", prompt=V, highlight=("30 s x 16 envs",))
+    render([("prompt", "python scripts/play.py --task pinky --perception yolo --enable_cameras --headless --seconds 30"),
+            ("out", "[yolo] /home/pw/rl_shortcut/logs/pinky_yolo/2026-11-24_12-13-15/weights/best.pt"),
+            ("out", "[play] /home/pw/rl_shortcut/logs/pinky/2026-11-24_12-21-44/model_299.pt"),
+            ("out", "[play] t=  1 s  fails=  0  speed 0.165 m/s  lane error 1.4 cm"),
+            ("out", "[play] t=  2 s  fails=  0  speed 0.233 m/s  lane error 1.1 cm"),
+            ("out", "[play] t=  3 s  fails=  0  speed 0.241 m/s  lane error 2.0 cm"),
+            ("out", "  ..."),
+            ("out", "[play] t= 30 s  fails=  0  speed 0.230 m/s  lane error 2.5 cm"),
+            ("out", "[play] 30 s x 16 envs: fails=0, speed 0.238 m/s  lane error 2.6 cm")],
+           "l12_t_play_yolo.png", prompt=V, highlight=("[yolo]", "30 s x 16 envs"))
+
+
 def go2():
     render([("prompt", "python scripts/go2_inspect.py --headless"),
             ("out", "USD: https://omniverse-content-production.s3-us-west-2.amazonaws.com/.../IsaacLab/Robots/Unitree/Go2/go2.usd"),
@@ -238,5 +302,5 @@ def g1_bruce():
 
 
 if __name__ == "__main__":
-    for f in (setup, physics, pendulum_check, pendulum, go2, g1_motion, g1_walk, g1_bruce):
+    for f in (setup, physics, pendulum_check, pendulum, pinky, go2, g1_motion, g1_walk, g1_bruce):
         f()

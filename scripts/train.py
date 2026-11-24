@@ -1,6 +1,7 @@
 """Train a policy with PPO (RSL-RL).
 
   python scripts/train.py --task pendulum --headless
+  python scripts/train.py --task pinky --headless
   python scripts/train.py --task go2 --headless
   python scripts/train.py --task g1 --motion walk --headless
   python scripts/train.py --task g1 --motion bruce_lee --headless --max_iterations 1000
@@ -12,8 +13,9 @@ import argparse
 from isaaclab.app import AppLauncher
 
 p = argparse.ArgumentParser()
-p.add_argument("--task", required=True, choices=["pendulum", "go2", "g1"])
+p.add_argument("--task", required=True, choices=["pendulum", "pinky", "go2", "g1"])
 p.add_argument("--motion", default="walk", help="g1 only: motions/<motion>.npz")
+p.add_argument("--perception", default="map", choices=["map", "yolo"], help="pinky only: where the road view comes from")
 p.add_argument("--num_envs", type=int, default=None)
 p.add_argument("--max_iterations", type=int, default=None)
 p.add_argument("--seed", type=int, default=42)

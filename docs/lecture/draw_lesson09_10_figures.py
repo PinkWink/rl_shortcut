@@ -1,4 +1,4 @@
-"""Concept figures for pages ⑨ ⑩ (G1 motion imitation). Output: docs/lecture/l09_*.png, l10_*.png
+"""Concept figures for pages ⑪ ⑫ (G1 motion imitation). Output: docs/lecture/l09_*.png, l10_*.png
 
   python3 docs/lecture/draw_lesson09_10_figures.py
 """
@@ -35,7 +35,7 @@ def mimic():
                ("강화학습", ["레퍼런스에 가까울수록 보상", "모터 명령은 정책이 찾는다"]),
                ("정책", ["관측 107 → 행동 23", "넘어지지 않고 따라 하기"])],
           1.0, 2.1, colors=[C["grey"], C["grey"], C["yellow"], C["purple"], C["green"]], tfs=11.5, fs=9.5)
-    note(ax, 0.3, 0.45, "레퍼런스에는 자세만 있고 모터 명령(행동)은 없습니다. 그래서 모방학습(ACT)처럼 지도 학습할 수 없고, 강화학습이 필요합니다.", fs=10.5)
+    note(ax, 0.3, 0.45, "레퍼런스에는 자세만 있고 모터 명령(행동)은 없음 → 모방학습(ACT)처럼 지도 학습 불가 · 강화학습 필요", fs=10.5)
     save(fig, "l09_mimic.png")
 
 
@@ -95,18 +95,18 @@ def rsi():
     for k, sx in enumerate(starts):
         arrow(ax, (sx, 1.3), (sx, 2.4), color=RED)
         rbox(ax, sx - 1.2, 0.5, 2.4, 0.75, f"env {k}: 여기서 시작", fc=C["red"], tfs=10, lw=1.0)
-    note(ax, 0.8, 0.15, "리셋마다 무작위 프레임 f 를 골라 그 순간의 관절 각 · 관절 속도 · 골반 높이 · 방향 · 이동 속도로 로봇을 놓습니다.", fs=10.5)
+    note(ax, 0.8, 0.15, "리셋마다 무작위 프레임 f 를 골라 그 순간의 관절 각 · 관절 속도 · 골반 높이 · 방향 · 이동 속도로 로봇을 놓음", fs=10.5)
     save(fig, "l09_rsi.png")
 
 
 def flow10():
     fig, ax = fig_ax(16, 3.4)
-    chain(ax, [("① 걷기 정책 (⑨)", ["g1_walk.pt", "걷기 레퍼런스로 학습"]),
+    chain(ax, [("① 걷기 정책 (⑪)", ["g1_walk.pt", "걷기 레퍼런스로 학습"]),
                ("② 걷기 정책 + 쿵푸 레퍼런스", ["학습 없이 바로 실행", "어떻게 될까?"]),
                ("③ 쿵푸 학습", ["코드 그대로, --motion 만", "bruce_lee, 3000 it"]),
                ("④ 쿵푸 정책 + 쿵푸 레퍼런스", ["g1_bruce_lee.pt", "추론 · 비교"])],
           0.9, 2.1, colors=[C["teal"], C["yellow"], C["purple"], C["red"]], tfs=11.5, fs=10)
-    note(ax, 0.3, 0.4, "네 단계 모두 같은 환경 코드(rl_shortcut/g1_env.py), 같은 관측 107 · 행동 23 입니다. 바뀌는 것은 레퍼런스와 정책뿐.", fs=10.5)
+    note(ax, 0.3, 0.4, "네 단계 모두 같은 환경 코드(rl_shortcut/g1_env.py), 같은 관측 107 · 행동 23 · 바뀌는 것은 레퍼런스와 정책뿐", fs=10.5)
     save(fig, "l10_flow.png")
 
 
@@ -144,7 +144,7 @@ def compare():
     rbox(ax, 10.2, 3.0, 5.5, 0.7, "쿵푸 (bruce_lee)", fc=C["red"], tfs=11.5)
     for i, pol in enumerate(["walk", "bruce_lee"]):
         y = 1.95 - i * 1.0
-        rbox(ax, 0.3, y, 4.2, 0.85, {"walk": "걷기 정책 (⑨)", "bruce_lee": "쿵푸 정책 (⑩)"}[pol], fc=C["grey"], tfs=11)
+        rbox(ax, 0.3, y, 4.2, 0.85, {"walk": "걷기 정책 (⑪)", "bruce_lee": "쿵푸 정책 (⑫)"}[pol], fc=C["grey"], tfs=11)
         for j, clip in enumerate(["walk", "bruce_lee"]):
             falls, err = COMPARE[(pol, clip)]
             ok = falls == 0

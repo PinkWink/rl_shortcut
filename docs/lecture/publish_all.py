@@ -19,6 +19,8 @@ PAGES = [
     ("lesson03_physics.md", "Isaac Sim 물리엔진: USD · PhysX · GPU 병렬 시뮬레이션"),
     ("lesson04_pendulum_env.md", "역진자 (1): PinkLAB 키트로 강화학습 환경 만들기"),
     ("lesson05_pendulum_train.md", "역진자 (2): PPO 학습과 평가"),
+    ("lesson11_pinky_yolo.md", "Pinky Pro (1): 핑크시티와 YOLO 도로 인식"),
+    ("lesson12_pinky_drive.md", "Pinky Pro (2): 도로 시야로 순환 도로 돌기 - 학습과 평가"),
     ("lesson06_go2_usd.md", "Unitree Go2 (1): USD 에서 서 있는 로봇까지"),
     ("lesson07_go2_env.md", "Unitree Go2 (2): 걷기 환경 - 명령 · 관측 · 보상"),
     ("lesson08_go2_train.md", "Unitree Go2 (3): 학습과 평가"),
@@ -34,7 +36,7 @@ def main():
     for n, (md, title) in enumerate(PAGES, 1):
         if only and n not in only:
             continue
-        pngs = sorted(set(re.findall(r"\((l\d+_[^)]+\.png)\)", (HERE / md).read_text())))
+        pngs = sorted(set(re.findall(r"\((l\d+_[^)]+\.(?:png|gif))\)", (HERE / md).read_text())))
         cmd = ["python3", str(HERE / "publish_confluence.py"), str(HERE / md), title]
         cmd += ["--update", ids[md]] if md in ids else [PARENT, SPACE]
         out = subprocess.run(cmd + [str(HERE / p) for p in pngs], capture_output=True, text=True, check=True).stdout

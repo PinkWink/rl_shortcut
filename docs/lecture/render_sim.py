@@ -241,11 +241,11 @@ SHOTS = {
     "drop": drop, "stand": stand, "go2": go2, "parallel": parallel,
     "g1_ref_walk": lambda: g1_ref("walk"), "g1_ref_bruce_lee": lambda: g1_ref("bruce_lee"),
     "pendulum_kit": lambda: run_policy("pendulum", "walk", "pendulum", 1, 1.0, [0.5], "pendulum_kit",
-                                       wide=((0.30, -0.36, 0.26), (0.0, 0.02, 0.11))),
+                                       wide=((0.24, 0.46, 0.24), (0.0, 0.02, 0.10))),   # +y side: PINKLAB logo
     "pendulum_balance": lambda: run_policy("pendulum", "walk", "pendulum", 1, 1.0, [0.0, 0.1, 0.2, 0.3, 0.5, 1.0],
-                                           "pendulum_balance", wide=((0.30, -0.36, 0.26), (0.0, 0.02, 0.11))),
+                                           "pendulum_balance", wide=((0.24, 0.46, 0.24), (0.0, 0.02, 0.10))),
     "pendulum": lambda: run_policy("pendulum", "walk", "pendulum", 16, 3.0, [2.0], "pendulum",
-                                   wide=((1.8, -1.8, 1.3), (0.0, 0.0, -0.05))),
+                                   wide=((0.8, 2.0, 0.9), (0.0, 0.0, -0.05))),   # +y side: PINKLAB logo
     "go2_play": lambda: run_policy("go2", "walk", "go2", 16, 6.0, [5.0], "go2_play",
                                    wide=((7.5, 7.5, 5.0), (0.0, 0.0, 0.0))),
     "go2_forward": lambda: run_policy("go2", "walk", "go2", 1, 4.0, [1.0, 1.4, 1.8, 2.2], "go2_forward",

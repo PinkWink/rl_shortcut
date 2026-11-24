@@ -1,4 +1,4 @@
-"""Figures for pages ⑥ ⑦ ⑧ (Go2). Output: docs/lecture/l06_*.png, l07_*.png, l08_*.png
+"""Figures for pages ⑧ ⑨ ⑩ (Go2). Output: docs/lecture/l06_*.png, l07_*.png, l08_*.png
 
   python3 docs/lecture/draw_lesson06_08_figures.py
 """
@@ -50,7 +50,7 @@ def task():
 
 def vs_pendulum():
     fig, ax = fig_ax(16, 4.6)
-    rows = [("", "역진자 (④⑤)", "Go2 (⑦⑧)"),
+    rows = [("", "역진자 (④⑤)", "Go2 (⑨⑩)"),
             ("명령 (Commands)", "없음", "속도 명령 3개, 10초마다 새로"),
             ("행동", "토크 1개 (팔 모터)", "관절 목표 12개 (기본 자세 + 0.25 × 행동)"),
             ("관측", "4개", "48개 (몸 상태 + 명령 + 관절 + 직전 행동, 잡음 포함)"),
@@ -99,7 +99,7 @@ def rewards():
         rbox(ax, 0.3, y, 4.2, 0.52, k, fc="white", tfs=10.5, lw=1.0)
         rbox(ax, 4.7, y, 1.9, 0.52, wgt, fc=fc, tfs=10.5, lw=1.0)
         rbox(ax, 6.8, y, 8.9, 0.52, m, fc="white", tfs=10.5, lw=1.0)
-    note(ax, 0.3, 0.1, "Isaac Lab 평지 Go2 예제 (UnitreeGo2FlatEnvCfg) 와 같은 항목 · 가중치입니다.", fs=10.5)
+    note(ax, 0.3, 0.1, "Isaac Lab 평지 Go2 예제 (UnitreeGo2FlatEnvCfg) 와 같은 항목 · 가중치", fs=10.5)
     save(fig, "l07_rewards.png")
 
 

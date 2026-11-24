@@ -145,12 +145,15 @@ def md_to_storage(md):
     return "\n".join(out)
 
 
+MIME = {".png": "image/png", ".gif": "image/gif"}
+
+
 def upload(page_id, path):
-    """Attach a PNG; if one with the same name exists, upload a new version of it."""
+    """Attach a PNG or GIF; if one with the same name exists, upload a new version of it."""
     p = Path(path)
     boundary = "----claudeboundary"
     data = (f"--{boundary}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"{p.name}\"\r\n"
-            f"Content-Type: image/png\r\n\r\n").encode() + p.read_bytes() + f"\r\n--{boundary}--\r\n".encode()
+            f"Content-Type: {MIME.get(p.suffix.lower(), 'application/octet-stream')}\r\n\r\n").encode() + p.read_bytes() + f"\r\n--{boundary}--\r\n".encode()
     headers = {"Content-Type": f"multipart/form-data; boundary={boundary}", "X-Atlassian-Token": "nocheck"}
     existing = request("GET", f"{BASE}/wiki/rest/api/content/{page_id}/child/attachment?filename={p.name}")
     if existing.get("results"):

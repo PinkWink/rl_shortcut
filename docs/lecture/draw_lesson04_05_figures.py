@@ -50,7 +50,7 @@ def rewards():
         for j, t in enumerate(r):
             fc = (C["green"] if r[1].startswith("+") else C["red"]) if j == 1 else "white"
             rbox(ax, x[j], y, w[j], 0.54, t, fc=fc, tfs=10.5, lw=1.0)
-    note(ax, 0.3, 0.2, "한 스텝의 보상 = Σ 가중치 × 값 × dt.  로그의 Episode_Reward/<항목> 은 항목별 점수입니다.", fs=10.5)
+    note(ax, 0.3, 0.2, "한 스텝의 보상 = Σ 가중치 × 값 × dt.  로그의 Episode_Reward/<항목> = 항목별 점수", fs=10.5)
     save(fig, "l04_rewards.png")
 
 
@@ -85,7 +85,7 @@ def log():
         rbox(ax, 0.3, y, 5.6, 0.54, k, fc=C["blue"], tfs=10.5, lw=1.0)
         rbox(ax, 6.1, y, 2.9, 0.54, v, fc=C["yellow"], tfs=10.5, lw=1.0)
         rbox(ax, 9.2, y, 6.5, 0.54, m, fc="white", tfs=10.5, lw=1.0)
-    note(ax, 0.3, 0.25, "값은 역진자 학습의 마지막 iteration (149) 실측입니다.", fs=10.5)
+    note(ax, 0.3, 0.25, "값: 역진자 학습의 마지막 iteration (149) 실측", fs=10.5)
     save(fig, "l05_log.png")
 
 
@@ -128,17 +128,18 @@ def task():
 
 
 def summary():
-    fig, ax = fig_ax(16, 3.8)
-    rows = [("역진자", "관측 4 · 행동 1", "진자 세우기", "약 20초"), ("Go2", "관측 48 · 행동 12", "속도 명령 따라 걷기", "2.7분"),
+    fig, ax = fig_ax(16, 4.42)
+    rows = [("역진자", "관측 4 · 행동 1", "진자 세우기", "약 20초"),
+            ("Pinky Pro", "관측 130 · 행동 2", "도로 시야를 보고 순환 도로 돌기", "2.9분"), ("Go2", "관측 48 · 행동 12", "속도 명령 따라 걷기", "2.7분"),
             ("G1 걷기", "관측 107 · 행동 23", "레퍼런스(걷기) 따라 하기", "약 30분"),
             ("G1 쿵푸", "관측 107 · 행동 23", "레퍼런스(쿵푸) 따라 하기", "약 40분")]
     x, w = [0.3, 3.4, 7.3, 12.6], [2.9, 3.7, 5.1, 3.1]
     for j, t in enumerate(["로봇", "정책 크기", "보상이 원하는 것", "학습 (RTX 5060 Ti)"]):
-        rbox(ax, x[j], 3.0, w[j], 0.55, t, fc=C["grey"], tfs=11, lw=1.0)
+        rbox(ax, x[j], 3.62, w[j], 0.55, t, fc=C["grey"], tfs=11, lw=1.0)
     for i, r in enumerate(rows):
-        y = 2.3 - i * 0.62
+        y = 2.92 - i * 0.62
         for j, t in enumerate(r):
-            rbox(ax, x[j], y, w[j], 0.52, t, fc=[C["yellow"], C["teal"], C["red"], C["red"]][i] if j == 0 else "white",
+            rbox(ax, x[j], y, w[j], 0.52, t, fc=[C["yellow"], C["purple"], C["teal"], C["red"], C["red"]][i] if j == 0 else "white",
                  tfs=10.5, lw=1.0)
     save(fig, "l10_summary.png")
 
