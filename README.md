@@ -8,6 +8,7 @@ The lecture (Korean) is on Confluence; its sources are in `docs/lecture/`.
 ## Install (Ubuntu 24.04, NVIDIA driver 580+)
 
 ```bash
+sudo apt update && sudo apt install -y git
 mkdir -p ~/rl_shortcut && cd ~/rl_shortcut
 git clone https://github.com/PinkWink/rl_shortcut.git .
 sudo add-apt-repository -y ppa:deadsnakes/ppa && sudo apt update
@@ -16,9 +17,10 @@ python3.11 -m venv .venv && source .venv/bin/activate && pip install --upgrade p
 pip install torch==2.7.0 torchvision==0.22.0 --index-url https://download.pytorch.org/whl/cu128
 pip install "isaacsim[all,extscache]==5.1.0" --extra-index-url https://pypi.nvidia.com
 git clone --depth 1 --branch v2.3.2 https://github.com/isaac-sim/IsaacLab.git
+export PIP_CONSTRAINT=~/rl_shortcut/constraints.txt PIP_BUILD_CONSTRAINT=~/rl_shortcut/constraints.txt   # tested versions
 (cd IsaacLab && ./isaaclab.sh --install rsl_rl)      # answer Yes to the EULA
-pip install -e .
-pip install --no-deps ultralytics==8.4.218 ultralytics-thop polars polars-runtime-32   # YOLO; --no-deps keeps numpy 1.26
+pip install -e . -c constraints.txt
+pip install --no-deps -c constraints.txt ultralytics==8.4.218 ultralytics-thop polars polars-runtime-32   # YOLO; --no-deps keeps numpy 1.26
 python scripts/check_install.py --headless
 ```
 

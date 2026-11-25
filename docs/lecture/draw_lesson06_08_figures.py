@@ -11,11 +11,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from figstyle import BLUE, GREEN, INK, RED, C, arrow, fig_ax, note, rbox, save  # noqa: E402
 
 # play.py --task go2 --cmd ... --seconds 6, 16 envs: (command, measured vx vy wz)
-SWEEP = [((0.5, 0, 0), (0.48, -0.02, 0.02)), ((1.0, 0, 0), (0.97, -0.05, -0.03)),
-         ((-0.5, 0, 0), (-0.47, 0.02, 0.03)), ((0, 0.5, 0), (-0.01, 0.48, 0.02)),
-         ((0, 0, 1.0), (-0.01, -0.03, 0.89)), ((1.0, 0, 0.5), (0.95, -0.06, 0.47)), ((0, 0, 0), (0.00, -0.01, -0.00))]
+SWEEP = [((0.5, 0, 0), (0.50, 0.02, -0.00)), ((1.0, 0, 0), (0.97, 0.03, -0.00)),
+         ((-0.5, 0, 0), (-0.47, 0.00, -0.02)), ((0, 0.5, 0), (-0.00, 0.47, 0.00)),
+         ((0, 0, 1.0), (-0.00, 0.00, 0.97)), ((1.0, 0, 0.5), (0.95, 0.04, 0.49)), ((0, 0, 0), (0.00, 0.00, 0.01))]
 # play.py --task go2 --cmd 1 0 0 --seconds 10 --num_envs 64 --checkpoint model_<it>.pt: mean vx
-PROGRESS = [(0, -0.01), (50, 0.00), (100, 0.65), (150, 0.89), (299, 0.98)]
+PROGRESS = [(0, -0.01), (50, 0.00), (100, 0.01), (150, 0.98), (200, 0.85), (300, 1.04), (499, 0.99)]
 
 
 def pd():
@@ -56,7 +56,7 @@ def vs_pendulum():
             ("관측", "4개", "48개 (몸 상태 + 명령 + 관절 + 직전 행동, 잡음 포함)"),
             ("보상", "진자 세우기", "명령 따라가기 + 걸음새 + 감점 6가지"),
             ("센서 · 무작위화", "없음", "발 접촉 센서 · 마찰 · 몸통 질량"),
-            ("학습", "4096 환경, 150 it, 약 20초", "4096 환경, 300 it, 2.7분")]
+            ("학습", "4096 환경, 150 it, 약 20초", "4096 환경, 500 it, 4.5분")]
     x, w = [0.3, 4.2, 8.0], [3.7, 3.6, 7.7]
     for i, r in enumerate(rows):
         y = 3.95 - i * 0.62
@@ -84,7 +84,7 @@ def obs():
 
 
 def rewards():
-    fig, ax = fig_ax(16, 6.4)
+    fig, ax = fig_ax(16, 7.02)
     rows = [("track_lin_vel_xy", "+1.5", "vx · vy 가 명령에 가까울수록 (exp)", C["green"]),
             ("track_ang_vel_z", "+0.75", "wz 가 명령에 가까울수록 (exp)", C["green"]),
             ("feet_air_time", "+0.25", "발이 0.5초 넘게 떴다 닿으면 (걸음을 유도)", C["green"]),
@@ -93,13 +93,14 @@ def rewards():
             ("flat_orientation", "-2.5", "몸통 기울기²", C["red"]),
             ("joint_torques", "-0.0002", "관절 토크²", C["red"]),
             ("joint_acc", "-2.5e-7", "관절 가속도²", C["red"]),
-            ("action_rate", "-0.01", "직전 행동과의 차이²", C["red"])]
+            ("action_rate", "-0.01", "직전 행동과의 차이²", C["red"]),
+            ("hip_deviation", "-0.2", "엉덩이 관절이 서 있는 자세에서 벗어난 각 (비틀기 방지)", C["red"])]
     for i, (k, wgt, m, fc) in enumerate(rows):
-        y = 5.55 - i * 0.62
+        y = 6.17 - i * 0.62
         rbox(ax, 0.3, y, 4.2, 0.52, k, fc="white", tfs=10.5, lw=1.0)
         rbox(ax, 4.7, y, 1.9, 0.52, wgt, fc=fc, tfs=10.5, lw=1.0)
         rbox(ax, 6.8, y, 8.9, 0.52, m, fc="white", tfs=10.5, lw=1.0)
-    note(ax, 0.3, 0.1, "Isaac Lab 평지 Go2 예제 (UnitreeGo2FlatEnvCfg) 와 같은 항목 · 가중치", fs=10.5)
+    note(ax, 0.3, 0.1, "Isaac Lab 평지 Go2 예제 (UnitreeGo2FlatEnvCfg) 의 항목 · 가중치 + hip_deviation", fs=10.5)
     save(fig, "l07_rewards.png")
 
 
@@ -148,8 +149,8 @@ def progress():
         ax2.annotate(f"{b:.2f}", (a, b), xytext=(6, -14), textcoords="offset points", fontsize=10)
     ax2.set_xlabel("iteration (체크포인트)"); ax2.set_ylabel("실제 vx (m/s)")
     ax2.set_ylim(-0.1, 1.15); ax2.grid(alpha=0.3); ax2.spines[["top", "right"]].set_visible(False)
-    rbox(ax, 10.6, 0.9, 5.1, 2.6, "같은 명령, 다른 체크포인트", ["64대 · 10초 평균", "0 · 50: 서 있기만 (넘어짐 0)",
-                                                               "100 이후 빠르게 명령에 다가감"],
+    rbox(ax, 10.6, 0.9, 5.1, 2.6, "같은 명령, 다른 체크포인트", ["64대 · 10초 평균", "0 · 50 · 100: 서 있기만 (넘어짐 0)",
+                                                               "150 부터 명령한 속도로 걸음"],
          fc=C["blue"], align="left", dy=0.5)
     save(fig, "l08_progress.png")
 

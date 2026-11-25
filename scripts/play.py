@@ -49,7 +49,7 @@ def main():
     if args.cmd is not None:          # go2: a fixed command instead of random ones
         vx, vy, wz = args.cmd
         c = env_cfg.commands.base_velocity
-        c.rel_standing_envs = 0.0
+        c.rel_standing_envs = c.rel_turning_envs = 0.0
         c.ranges.lin_vel_x, c.ranges.lin_vel_y, c.ranges.ang_vel_z = (vx, vx), (vy, vy), (wz, wz)
     ckpt = Path(args.checkpoint) if args.checkpoint and args.checkpoint.endswith(".pt") \
         else latest_checkpoint(args.checkpoint or runner_cfg.experiment_name)

@@ -22,10 +22,10 @@ def requirements():
 
 def install_flow():
     fig, ax = fig_ax(16, 3.9)
-    chain(ax, [("① 작업 폴더", ["mkdir · git clone"]), ("② apt", ["python3.11 · git · cmake"]),
+    chain(ax, [("① 작업 폴더", ["git 설치 · git clone"]), ("② apt", ["python3.11 · cmake"]),
                ("③ venv", ["python3.11 -m venv"]), ("④ PyTorch", ["2.7.0 · CUDA 12.8"])],
           2.2, 1.15, gap=0.4, colors=[C["blue"], C["grey"], C["purple"], C["yellow"]], tfs=12, fs=10)
-    chain(ax, [("⑤ Isaac Sim", ["5.1.0 pip 휠"]), ("⑥ Isaac Lab", ["2.3.2 · rsl_rl"]),
+    chain(ax, [("⑤ Isaac Sim", ["5.1.0 pip 휠"]), ("⑥ Isaac Lab", ["2.3.2 · rsl_rl · 버전 고정"]),
                ("⑦ 이 과정", ["pip install -e . · YOLO"]), ("⑧ 확인", ["check_install.py"])],
           0.4, 1.15, gap=0.4, colors=[C["red"], C["teal"], C["blue"], C["green"]], tfs=12, fs=10)
     xr, xl = 0.3 + 3 * 3.95 + 1.775, 0.3 + 1.775
@@ -79,17 +79,19 @@ def scripts_map():
 
 
 def troubleshoot():
-    fig, ax = fig_ax(16, 5.0)
+    fig, ax = fig_ax(16, 6.56)
     rows = [("Unable to locate package python3.11", "deadsnakes PPA 없음", "② add-apt-repository 먼저"),
             ("fatal: destination path '.' already exists ...", "폴더가 비어 있지 않음", "ls -a 확인 후 비우고 다시"),
-            ("No module named 'isaaclab'", "venv 활성화 안 됨", "source .venv/bin/activate"),
+            ("No module named 'isaaclab'", "venv 활성화 안 됨 · ⑥ 실패", "source .venv/bin/activate · ⑥ 다시"),
             ("Do you accept the EULA? (Yes/No)", "첫 실행 라이선스 확인", "Yes 입력 (한 번만)"),
-            ("CUDA error: no kernel image is available", "torch 가 CUDA 12.8 빌드가 아님", "④ 명령의 --index-url 확인")]
+            ("CUDA error: no kernel image is available", "torch 가 CUDA 12.8 빌드가 아님", "④ 명령의 --index-url 확인"),
+            ("ImportError: cannot import name 'is_structseq_instance'", "패키지가 최신 버전으로 설치됨", "⑥ 을 export 두 줄과 함께 다시"),
+            ("503 Service Unavailable (apt install)", "PPA 서버가 잠시 응답 없음", "② 의 apt install 다시 실행")]
     x = [0.3, 7.6, 11.0]; w = [7.1, 3.2, 4.7]
     for j, t in enumerate(["증상 (메시지)", "원인", "해결"]):
-        rbox(ax, x[j], 4.15, w[j], 0.6, t, fc=[C["grey"], C["yellow"], C["green"]][j], tfs=11)
+        rbox(ax, x[j], 5.71, w[j], 0.6, t, fc=[C["grey"], C["yellow"], C["green"]][j], tfs=11)
     for i, r in enumerate(rows):
-        y = 3.35 - i * 0.78
+        y = 4.91 - i * 0.78
         for j, t in enumerate(r):
             rbox(ax, x[j], y, w[j], 0.64, t, fc="white", tfs=9.5 if j == 0 else 10, lw=1.0)
     save(fig, "l02_troubleshoot.png")

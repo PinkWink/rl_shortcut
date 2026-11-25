@@ -62,7 +62,7 @@ python scripts/go2_inspect.py --headless
 stage = sim_utils.get_current_stage()
 for prim in stage.Traverse():
     if prim.HasAPI(UsdPhysics.RigidBodyAPI):          # a link
-        links.append((prim.GetName(), UsdPhysics.MassAPI(prim).GetMassAttr().Get()))
+        links.append((prim.GetName(), UsdPhysics.MassAPI(prim).GetMassAttr().Get() or 0.0))
     if prim.IsA(UsdPhysics.RevoluteJoint):            # a joint
         j = UsdPhysics.RevoluteJoint(prim)
         joints.append((prim.GetName(), j.GetLowerLimitAttr().Get(), j.GetUpperLimitAttr().Get()))

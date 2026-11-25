@@ -85,13 +85,13 @@
 
 - 로봇 USD 를 열어 보는 데서 시작해 PD 모터로 세움
 - 속도 명령을 따라 걷는 환경과 보상을 설계함
-- 4096 대로 2.7분 학습 · 명령한 속도와 실제 속도를 견줌
+- 4096 대로 4.5분 학습 · 명령한 속도와 실제 속도를 견줌
 
 | 페이지 | 내용 |
 |---|---|
 | [8. Unitree Go2 (1): USD 에서 서 있는 로봇까지](https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3729686529) | 링크 · 관절 순서 · PD 모터 |
 | [9. Unitree Go2 (2): 걷기 환경](https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3727917081) | 속도 명령 · 관측 48개 · 보상 설계 |
-| [10. Unitree Go2 (3): 학습과 평가](https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3729555473) | 2.7분 학습 · 명령별 실제 속도 · 영상 저장 |
+| [10. Unitree Go2 (3): 학습과 평가](https://pinkwink.atlassian.net/wiki/spaces/EDU/pages/3729555473) | 4.5분 학습 · 명령별 실제 속도 · 영상 저장 |
 
 ### 5. Unitree G1: 모션 모방 (11 · 12)
 

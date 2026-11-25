@@ -6,6 +6,7 @@ motor model and the standing pose (page 6). The env follows Isaac Lab's flat Go2
 import math
 
 import isaaclab.envs.mdp as mdp
+import torch
 import isaaclab.sim as sim_utils
 import isaaclab_tasks.manager_based.locomotion.velocity.mdp as loco
 from isaaclab.actuators import DCMotorCfg
@@ -62,10 +63,28 @@ class SceneCfg(InteractiveSceneCfg):
     light = AssetBaseCfg(prim_path="/World/light", spawn=sim_utils.DomeLightCfg(intensity=2000.0))
 
 
+class VelocityCommand(mdp.UniformVelocityCommand):
+    """Random (vx, vy, wz); a share of the robots gets vx = vy = 0: turning on the spot.
+
+    With uniform sampling alone under 1% of the commands are close to a pure turn, too few to learn it.
+    """
+
+    def _resample_command(self, env_ids):
+        super()._resample_command(env_ids)
+        turn = torch.rand(len(env_ids), device=self.device) < self.cfg.rel_turning_envs
+        self.vel_command_b[env_ids[turn], :2] = 0.0
+
+
+@configclass
+class VelocityCommandCfg(mdp.UniformVelocityCommandCfg):
+    class_type: type = VelocityCommand
+    rel_turning_envs: float = 0.0
+
+
 @configclass
 class CommandsCfg:
-    base_velocity = mdp.UniformVelocityCommandCfg(
-        asset_name="robot", resampling_time_range=(10.0, 10.0), rel_standing_envs=0.02,
+    base_velocity = VelocityCommandCfg(
+        asset_name="robot", resampling_time_range=(10.0, 10.0), rel_standing_envs=0.02, rel_turning_envs=0.1,
         heading_command=False, debug_vis=True,
         ranges=mdp.UniformVelocityCommandCfg.Ranges(lin_vel_x=(-1.0, 1.0), lin_vel_y=(-1.0, 1.0),
                                                     ang_vel_z=(-1.0, 1.0)),
@@ -131,6 +150,9 @@ class RewardsCfg:
     joint_torques = RewTerm(func=mdp.joint_torques_l2, weight=-2.0e-4)
     joint_acc = RewTerm(func=mdp.joint_acc_l2, weight=-2.5e-7)
     action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.01)
+    # hips near the standing pose: to turn, the robot has to step instead of twisting its legs
+    hip_deviation = RewTerm(func=mdp.joint_deviation_l1, weight=-0.2,
+                            params={"asset_cfg": SceneEntityCfg("robot", joint_names=".*_hip_joint")})
 
 
 @configclass
@@ -168,5 +190,5 @@ def make_env_cfg(args):
 
 
 def make_runner_cfg(args):
-    return make_ppo_cfg(EXPERIMENT, max_iterations=300, hidden=(128, 128, 128), steps_per_env=24,
+    return make_ppo_cfg(EXPERIMENT, max_iterations=500, hidden=(128, 128, 128), steps_per_env=24,
                         entropy_coef=0.01)

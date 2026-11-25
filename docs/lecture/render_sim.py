@@ -209,7 +209,7 @@ def run_policy(task, motion, checkpoint, num_envs, seconds, grab_at, name, cmd=N
     env_cfg.viewer.resolution = (W, H)
     if cmd is not None:
         c = env_cfg.commands.base_velocity
-        c.rel_standing_envs = 0.0
+        c.rel_standing_envs = c.rel_turning_envs = 0.0
         c.ranges.lin_vel_x, c.ranges.lin_vel_y, c.ranges.ang_vel_z = [(v, v) for v in cmd]
     if task == "go2" and not wide:
         env_cfg.viewer.eye, env_cfg.viewer.lookat = (0.6, -2.2, 0.7), (0.3, 0.0, 0.2)

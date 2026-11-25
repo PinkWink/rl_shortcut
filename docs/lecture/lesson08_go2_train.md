@@ -7,25 +7,25 @@ cd ~/rl_shortcut && source .venv/bin/activate
 python scripts/train.py --task go2 --headless
 ```
 
-- 4096 대의 Go2 가 동시에 연습 · 300 iteration · 이 PC(RTX 5060 Ti)에서 **2.7분** (iteration 당 0.54초)
+- 4096 대의 Go2 가 동시에 연습 · 500 iteration · 이 PC(RTX 5060 Ti)에서 **4.5분** (iteration 당 0.52초)
 - 한 iteration = 4096 대 × 24 스텝 = 약 10만 스텝의 경험
-- 300 iteration = 약 3천만 스텝 = Go2 한 대가 **약 7일** 걸을 분량
+- 500 iteration = 약 4천9백만 스텝 = Go2 한 대가 **약 11일** 걸을 분량
 
 ### 실행 결과: 마지막 iteration
 
 ![train.py --task go2 마지막 로그](l08_t_train.png){width=1000}
 
-- `Episode_Reward/track_lin_vel_xy` 1.43 = 최대값(가중치 1.5)의 95% · 실제 속도 오차 평균 0.18 m/s (`Metrics/base_velocity/error_vel_xy`)
+- `Episode_Reward/track_lin_vel_xy` 1.44 = 최대값(가중치 1.5)의 96% · 실제 속도 오차 평균 0.16 m/s (`Metrics/base_velocity/error_vel_xy`)
 - `Episode_Reward/feet_air_time` -0.03 : 이 보상은 (공중 시간 - 0.5초) → 0.5초보다 짧은 잰걸음이면 음수 · 정책은 작은 감점을 감수하고 짧고 빠른 걸음을 선택
-- `Episode_Termination/base_contact` 0.007 = 끝난 에피소드 중 넘어진 것은 1% 미만
+- `Episode_Termination/base_contact` 0.014 = 끝난 에피소드 중 넘어진 것은 1.4%
 
 ### 학습 곡선
 
 ![보상 항목별 곡선](l08_curve.png){width=1000}
 
 - 에피소드 길이: 40 iteration 쯤 최대(1000 스텝 = 20초) 도달 = 넘어지지 않는 법을 먼저 익힘
-- 속도 따라가기: 50 ~ 150 iteration 사이에 빠르게 상승
-- 회전 따라가기: 300 iteration 까지 천천히 계속 상승
+- 속도 따라가기: 100 ~ 200 iteration 사이에 빠르게 상승 · 300 부터는 거의 그대로
+- 회전 따라가기: 400 iteration 까지 천천히 계속 상승
 
 ## 2. 평가
 
@@ -58,8 +58,8 @@ python scripts/play.py --task go2 --cmd 0.0 0.0 1.0     # 제자리 회전 1 rad
 
 ![명령 7가지에 대한 실제 속도 (6초, 16대 평균)](l08_sweep.png){width=1000}
 
-- 앞뒤 · 옆 · 대각 이동: 명령과 0.03 m/s 안에서 일치
-- 제자리 회전: 1.0 rad/s 명령에 0.89 rad/s 로 조금 덜 돎
+- 앞뒤 · 옆 · 대각 이동: 명령과 0.05 m/s 안에서 일치
+- 제자리 회전: 1.0 rad/s 명령에 0.97 rad/s
 - 7가지 모두 넘어진 로봇 없음 (fails=0)
 
 ### 터미널: 학습 중간의 정책
@@ -73,8 +73,8 @@ python scripts/play.py --task go2 --cmd 1.0 0.0 0.0 --checkpoint logs/go2/<날�
 
 ![iteration 별: 앞으로 1 m/s 명령에 대한 속도](l08_progress.png){width=1000}
 
-- iteration 0 · 50 의 정책: 명령을 받아도 제자리에 서 있음 (넘어지지 않는 것부터 배움)
-- 100 에서 0.65 m/s → 150 에서 0.89 m/s → 마지막(299) 0.98 m/s
+- iteration 0 · 50 · 100 의 정책: 명령을 받아도 제자리에 서 있음 (넘어지지 않는 것부터 배움)
+- 150 에서 0.98 m/s → 200 에서 0.85 m/s 로 흔들린 뒤 → 마지막(499) 0.99 m/s
 
 ## 3. 영상으로 저장하기
 
@@ -106,7 +106,7 @@ runner.load(str(ckpt), load_optimizer=False)
 policy = runner.get_inference_policy(device="cuda:0")
 
 obs = wrapped.get_observations()
-while app.is_running():
+while app.is_running() and (steps is None or step < steps):
     with torch.inference_mode():
         obs, _, dones, extras = wrapped.step(policy(obs))
 ```

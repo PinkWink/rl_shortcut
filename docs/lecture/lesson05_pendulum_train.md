@@ -88,7 +88,7 @@ python scripts/play.py --task pendulum
 
 ```python
 # scripts/train.py  (발췌)
-task = importlib.import_module(f"rl_shortcut.{args.task}_env")   # pendulum_env, go2_env, g1_env
+task = importlib.import_module(f"rl_shortcut.{args.task}_env")   # pendulum_env, pinky_env, go2_env, g1_env
 env_cfg = task.make_env_cfg(args)
 runner_cfg = task.make_runner_cfg(args)
 

@@ -13,12 +13,14 @@ LAB = "(.venv) pw@laptop:~/rl_shortcut/IsaacLab$ "
 
 
 def setup():
-    render([("prompt", "mkdir -p ~/rl_shortcut"),
+    render([("prompt", "sudo apt update && sudo apt install -y git"),
+            ("out", "  ..."),
+            ("prompt", "mkdir -p ~/rl_shortcut"),
             ("prompt", "cd ~/rl_shortcut"),
             ("prompt", "git clone https://github.com/PinkWink/rl_shortcut.git .", "pw@laptop:~/rl_shortcut$ "),
             ("out", "Cloning into '.'..."),
             ("prompt", "ls", "pw@laptop:~/rl_shortcut$ "),
-            ("out", "assets  checkpoints  docs  motions  pyproject.toml  README.md  rl_shortcut  scripts  tools")],
+            ("out", "assets  checkpoints  constraints.txt  docs  motions  pyproject.toml  README.md  rl_shortcut  scripts  tools")],
            "l02_t_clone.png", prompt="pw@laptop:~$ ", title="pw@laptop: ~ — bash", highlight=("checkpoints",))
     render([("prompt", "python3.11 -m venv .venv && source .venv/bin/activate"),
             ("prompt", "pip install torch==2.7.0 torchvision==0.22.0 --index-url https://download.pytorch.org/whl/cu128"),
@@ -32,7 +34,9 @@ def setup():
             ("prompt", "du -sh .venv"),
             ("out", "18G\t.venv")],
            "l02_t_pip.png", prompt=V, highlight=("Successfully installed", "18G"))
-    render([("prompt", "./isaaclab.sh --install rsl_rl"),
+    render([("prompt", "export PIP_CONSTRAINT=~/rl_shortcut/constraints.txt"),
+            ("prompt", "export PIP_BUILD_CONSTRAINT=$PIP_CONSTRAINT"),
+            ("prompt", "./isaaclab.sh --install rsl_rl"),
             ("out", "[INFO] Installing extra requirements such as learning frameworks..."),
             ("out", "[INFO] Installing rl-framework: rsl_rl"),
             ("out", "  ..."),
@@ -50,10 +54,13 @@ def setup():
             ("out", "isaacsim     5.1.0.0"),
             ("out", "isaaclab     0.54.2"),
             ("out", "rsl-rl-lib   3.1.2"),
+            ("out", "tensordict   0.14.3"),
             ("out", "torch        2.7.0+cu128"),
+            ("out", "ultralytics  8.4.218"),
             ("out", "GPU          NVIDIA GeForce RTX 5060 Ti, cuda True"),
+            ("out", "course code  pendulum, pinky, go2, g1: import OK"),
             ("out", "physics: 100 steps of 0.01 s on cuda:0")],
-           "l02_t_check.png", prompt=V, highlight=("cuda True", "physics:"))
+           "l02_t_check.png", prompt=V, highlight=("cuda True", "import OK", "physics:"))
 
 
 def physics():
@@ -217,19 +224,19 @@ def go2():
             ("out", "t=2.5 s  body height 0.276 m  max joint error 0.303 rad  max torque   7.5 Nm"),
             ("out", "t=3.0 s  body height 0.283 m  max joint error 0.236 rad  max torque   6.0 Nm")],
            "l06_t_stand.png", prompt=V, highlight=("t=3.0",))
-    render([("out", "                      Learning iteration 299/300"),
-            ("out", "                       Computation: 183948 steps/s (collection: 0.454s, learning 0.081s)"),
-            ("out", "                       Mean reward: 34.95"),
-            ("out", "               Mean episode length: 1000.00"),
-            ("out", "   Episode_Reward/track_lin_vel_xy: 1.4318"),
-            ("out", "    Episode_Reward/track_ang_vel_z: 0.6581"),
-            ("out", "      Episode_Reward/feet_air_time: -0.0340"),
-            ("out", "      Episode_Reward/joint_torques: -0.0861"),
-            ("out", "Metrics/base_velocity/error_vel_xy: 0.1793"),
-            ("out", "      Episode_Termination/time_out: 0.9927"),
-            ("out", "  Episode_Termination/base_contact: 0.0073"),
-            ("out", "                    Iteration time: 0.53s"),
-            ("out", "                      Time elapsed: 00:02:43")],
+    render([("out", "                      Learning iteration 499/500"),
+            ("out", "                       Computation: 188421 steps/s (collection: 0.442s, learning 0.080s)"),
+            ("out", "                       Mean reward: 34.57"),
+            ("out", "               Mean episode length: 995.57"),
+            ("out", "   Episode_Reward/track_lin_vel_xy: 1.4421"),
+            ("out", "    Episode_Reward/track_ang_vel_z: 0.6688"),
+            ("out", "      Episode_Reward/feet_air_time: -0.0287"),
+            ("out", "      Episode_Reward/joint_torques: -0.0749"),
+            ("out", "Metrics/base_velocity/error_vel_xy: 0.1615"),
+            ("out", "      Episode_Termination/time_out: 0.9859"),
+            ("out", "  Episode_Termination/base_contact: 0.0141"),
+            ("out", "                    Iteration time: 0.52s"),
+            ("out", "                      Time elapsed: 00:04:26")],
            "l08_t_train.png", prompt=V, highlight=("track_lin_vel_xy", "error_vel_xy", "base_contact"))
 
 

@@ -57,7 +57,7 @@ def main():
     env_cfg.viewer.resolution = (1920, 1080)
     if args.shot == "go2_forward":
         c = env_cfg.commands.base_velocity
-        c.rel_standing_envs, c.debug_vis = 0.0, False
+        c.rel_standing_envs, c.rel_turning_envs, c.debug_vis = 0.0, 0.0, False
         c.ranges.lin_vel_x, c.ranges.lin_vel_y, c.ranges.ang_vel_z = (1.0, 1.0), (0.0, 0.0), (0.0, 0.0)
         env_cfg.viewer.eye, env_cfg.viewer.lookat = (0.6, -2.2, 0.7), (0.3, 0.0, 0.2)
     if task == "g1":

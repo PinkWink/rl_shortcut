@@ -38,8 +38,8 @@ class SceneCfg(InteractiveSceneCfg):
 # rl_shortcut/go2_env.py  (발췌)
 @configclass
 class CommandsCfg:
-    base_velocity = mdp.UniformVelocityCommandCfg(
-        asset_name="robot", resampling_time_range=(10.0, 10.0), rel_standing_envs=0.02,
+    base_velocity = VelocityCommandCfg(
+        asset_name="robot", resampling_time_range=(10.0, 10.0), rel_standing_envs=0.02, rel_turning_envs=0.1,
         heading_command=False, debug_vis=True,
         ranges=mdp.UniformVelocityCommandCfg.Ranges(lin_vel_x=(-1.0, 1.0), lin_vel_y=(-1.0, 1.0),
                                                     ang_vel_z=(-1.0, 1.0)),
@@ -47,7 +47,7 @@ class CommandsCfg:
 ```
 
 - 10초마다 환경별로 새 명령을 무작위로 뽑음
-- 2% 의 환경은 "제자리에 서 있기"(명령 0)
+- 2% 는 "제자리에 서 있기"(명령 0) · 10% 는 "제자리 회전"(vx = vy = 0, `rel_turning_envs`)
 - `debug_vis=True` = 창에서 로봇 위에 화살표 두 개 (초록: 명령 · 파랑: 실제 속도)
 
 ### 행동 (코드) - ActionsCfg
@@ -154,11 +154,13 @@ flat_orientation = RewTerm(func=mdp.flat_orientation_l2, weight=-2.5)
 joint_torques = RewTerm(func=mdp.joint_torques_l2, weight=-2.0e-4)
 joint_acc = RewTerm(func=mdp.joint_acc_l2, weight=-2.5e-7)
 action_rate = RewTerm(func=mdp.action_rate_l2, weight=-0.01)
+hip_deviation = RewTerm(func=mdp.joint_deviation_l1, weight=-0.2,
+                        params={"asset_cfg": SceneEntityCfg("robot", joint_names=".*_hip_joint")})
 ```
 
 - 몸통이 위아래로 튀거나(`lin_vel_z`) · 구르거나(`ang_vel_xy`) · 기울면(`flat_orientation`) 감점
-- 토크 · 관절 가속도 · 행동 변화가 크면 감점
-- 실물 모터를 아끼고 떨림을 줄이는 항목
+- 토크 · 관절 가속도 · 행동 변화가 크면 감점 = 실물 모터를 아끼고 떨림을 줄이는 항목
+- `hip_deviation` = 엉덩이 관절이 서 있는 자세에서 벗어나면 감점 → 다리를 비틀지 않고 발을 떼어 회전
 
 ### 종료 (코드) - TerminationsCfg
 
