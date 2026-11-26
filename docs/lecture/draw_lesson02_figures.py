@@ -23,7 +23,7 @@ def requirements():
 def install_flow():
     fig, ax = fig_ax(16, 2.6)
     chain(ax, [("① 저장소 받기", ["git 설치 · git clone"]), ("② 설치 스크립트", ["./scripts/install.sh  (약 20분)"]),
-               ("③ 설치 확인", ["check_install.py"])],
+               ("③ 설치 확인", ["env.sh · check_install.py"])],
           0.5, 1.35, gap=0.5, colors=[C["blue"], C["teal"], C["green"]], tfs=12.5, fs=10.5)
     note(ax, 0.3, 2.3, "검증: 새로 설치한 Ubuntu 24.04 에서 ① ~ ③ 약 20분 (인터넷 속도에 따라 달라짐)", fs=10)
     save(fig, "l02_install_flow.png")
@@ -66,8 +66,9 @@ def folders():
 
 
 def scripts_map():
-    fig, ax = fig_ax(16, 9.04)
+    fig, ax = fig_ax(16, 9.72)
     rows = [("install.sh", "한 번에 설치 (apt · venv · pip · Isaac Lab)", "②", C["green"]),
+            ("env.sh", "새 터미널마다 source: 가상환경 활성화 · 버전 확인", "②", C["green"]),
             ("check_install.py", "버전 · GPU · 물리 100 스텝 확인", "②", C["green"]),
             ("physics_drop.py", "공 3개 낙하: 반발 계수 · dt", "③", C["blue"]),
             ("physics_parallel.py", "Go2 N 대 병렬 물리 속도", "③", C["blue"]),
@@ -80,13 +81,13 @@ def scripts_map():
             ("go2_stand.py", "PD 모터로 서 있기 (kp 비교)", "⑧", C["yellow"]),
             ("g1_motion.py", "G1 레퍼런스 동작 재생", "⑪⑫", C["red"])]
     for i, (name, what, page, fc) in enumerate(rows):
-        y = 8.17 - i * 0.68
+        y = 8.85 - i * 0.68
         rbox(ax, 0.3, y, 6.4, 0.56, name, fc=fc, tfs=10.5, lw=1.0)
         rbox(ax, 6.9, y, 6.9, 0.56, what, fc="white", tfs=10, lw=1.0)
         rbox(ax, 14.0, y, 1.7, 0.56, page, fc=C["grey"], tfs=10.5, lw=1.0)
-    note(ax, 0.3, 8.92, "scripts/ 아래 스크립트", bold=True, color=INK, fs=11)
-    note(ax, 6.9, 8.92, "하는 일", bold=True, color=INK, fs=11)
-    note(ax, 14.0, 8.92, "페이지", bold=True, color=INK, fs=11)
+    note(ax, 0.3, 9.60, "scripts/ 아래 스크립트", bold=True, color=INK, fs=11)
+    note(ax, 6.9, 9.60, "하는 일", bold=True, color=INK, fs=11)
+    note(ax, 14.0, 9.60, "페이지", bold=True, color=INK, fs=11)
     save(fig, "l02_scripts_map.png")
 
 
@@ -94,7 +95,7 @@ def troubleshoot():
     fig, ax = fig_ax(16, 6.56)
     rows = [("디스크 여유가 ... GB 입니다. 30 GB 이상 필요합니다.", "설치에 30 GB 필요", "공간을 비우고 install.sh 다시"),
             ("fatal: destination path 'rl_shortcut' already exists", "이미 받은 폴더가 있음", "cd ~/rl_shortcut 후 ② 부터"),
-            ("No module named 'isaaclab'", "venv 활성화 안 됨 · 설치 중단", "source .venv/bin/activate · install.sh 다시"),
+            ("No module named 'isaaclab'", "환경을 켜지 않음 · 설치 중단", "cd ~/rl_shortcut · source scripts/env.sh"),
             ("Do you accept the EULA? (Yes/No)", "첫 실행 라이선스 확인", "Yes 입력 (한 번만)"),
             ("CUDA error: no kernel image is available", "torch 가 CUDA 12.8 빌드가 아님", "rm -rf .venv 후 install.sh 다시"),
             ("ImportError: cannot import name 'is_structseq_instance'", "패키지를 따로 올려 버전이 바뀜", "rm -rf .venv 후 install.sh 다시"),

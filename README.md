@@ -11,7 +11,7 @@ The lecture (Korean) is on Confluence; its sources are in `docs/lecture/`.
 sudo apt update && sudo apt install -y git
 cd ~ && git clone https://github.com/PinkWink/rl_shortcut.git && cd rl_shortcut
 ./scripts/install.sh                 # apt (Python 3.11), .venv, PyTorch, Isaac Sim, Isaac Lab, this course: about 20 minutes
-source .venv/bin/activate
+source scripts/env.sh                # every new terminal, from this folder: activate .venv, keep conda / ROS 2 Python out, check versions
 python scripts/check_install.py --headless      # answer Yes to the EULA on the first run
 ```
 

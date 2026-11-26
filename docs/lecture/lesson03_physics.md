@@ -37,6 +37,7 @@
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/physics_drop.py
 ```
 
@@ -59,6 +60,7 @@ python scripts/physics_drop.py
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/physics_drop.py --headless --dt 0.02
 ```
 
@@ -97,6 +99,7 @@ RigidObjectCfg(
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/physics_parallel.py --num_envs 16
 python scripts/physics_parallel.py --headless --num_envs 4096
 ```

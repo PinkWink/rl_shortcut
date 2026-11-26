@@ -12,6 +12,7 @@
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/g1_motion.py --motion bruce_lee
 ```
 
@@ -28,6 +29,7 @@ python scripts/g1_motion.py --motion bruce_lee
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/play.py --task g1 --motion bruce_lee --checkpoint g1_walk
 ```
 
@@ -54,7 +56,8 @@ python scripts/play.py --task g1 --motion bruce_lee --checkpoint g1_walk
 ### 터미널: 학습 실행
 
 ```bash
-cd ~/rl_shortcut && source .venv/bin/activate
+cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/train.py --task g1 --motion bruce_lee --headless
 ```
 
@@ -90,6 +93,7 @@ python scripts/train.py --task g1 --motion bruce_lee --headless
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/play.py --task g1 --motion bruce_lee
 ```
 

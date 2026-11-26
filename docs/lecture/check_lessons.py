@@ -49,7 +49,15 @@ def excerpts():
     bad = 0
     for page in ORDER:
         for heading, lang, body in blocks(page):
-            if lang == "bash" or not body:
+            if lang == "bash":       # a new terminal must work: the work folder first, then the course environment
+                if body[:1] != ["cd ~/rl_shortcut"] and body[:1] != ["cd ~"]:
+                    print(f"lesson{page}.md [{heading}]: bash block does not start with cd ~/rl_shortcut")
+                    bad += 1
+                if any(line.startswith("python ") for line in body) and body[1:2] != ["source scripts/env.sh"]:
+                    print(f"lesson{page}.md [{heading}]: python command without source scripts/env.sh")
+                    bad += 1
+                continue
+            if not body:
                 continue
             m = re.match(r"\s*(?:#|//)\s*([\w./-]+\.\w+)", body[0])
             if not m:

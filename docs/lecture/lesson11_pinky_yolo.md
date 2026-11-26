@@ -47,7 +47,8 @@
 ### 터미널: 400장 모으기
 
 ```bash
-cd ~/rl_shortcut && source .venv/bin/activate
+cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/pinky_dataset.py --headless --enable_cameras
 ```
 
@@ -85,7 +86,8 @@ python scripts/pinky_dataset.py --headless --enable_cameras
 ### 터미널: 학습 실행
 
 ```bash
-cd ~/rl_shortcut && source .venv/bin/activate
+cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/pinky_yolo.py
 ```
 
@@ -111,6 +113,7 @@ python scripts/pinky_yolo.py
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/pinky_yolo.py --check
 ```
 

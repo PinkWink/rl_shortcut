@@ -38,6 +38,7 @@
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/g1_motion.py --motion walk
 ```
 
@@ -160,7 +161,8 @@ height_off = DoneTerm(func=height_off, params={"limit": 0.3})
 ### 터미널: 학습 실행
 
 ```bash
-cd ~/rl_shortcut && source .venv/bin/activate
+cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/train.py --task g1 --motion walk --headless
 ```
 
@@ -186,6 +188,7 @@ python scripts/train.py --task g1 --motion walk --headless
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/play.py --task g1 --motion walk
 ```
 

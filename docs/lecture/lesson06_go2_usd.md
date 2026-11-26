@@ -27,6 +27,7 @@ GO2_USD = f"{ISAACLAB_NUCLEUS_DIR}/Robots/Unitree/Go2/go2.usd"
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/go2_inspect.py --headless
 ```
 
@@ -135,6 +136,7 @@ GO2_CFG = ArticulationCfg(
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/go2_stand.py
 python scripts/go2_stand.py --kp 5
 python scripts/go2_stand.py --kp 0

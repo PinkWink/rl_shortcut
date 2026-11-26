@@ -3,7 +3,7 @@
 #   ./scripts/install.sh
 # apt 패키지(Python 3.11) → .venv → PyTorch → Isaac Sim → Isaac Lab → 이 과정의 패키지 순서로 한 번에 진행한다.
 # 여러 번 실행해도 안전하다: 네트워크가 끊겨 멈추면 다시 실행하면 이어서 설치한다.
-# 끝나면 python scripts/check_install.py --headless 로 확인한다.
+# 끝나면 source scripts/env.sh 로 환경을 켜고 python scripts/check_install.py --headless 로 확인한다.
 set -eo pipefail
 WS="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$WS"
@@ -117,8 +117,9 @@ EOF
 cat <<EOF
 
 ✅ 설치 완료. 이어서 확인합니다:
-  cd $WS && source .venv/bin/activate
+  cd $WS
+  source scripts/env.sh
   python scripts/check_install.py --headless      # course code ... import OK 가 나오면 준비 끝
 처음 실행할 때 NVIDIA Omniverse 라이선스(EULA) 동의를 물으면 Yes 를 입력합니다.
-새 터미널을 열 때마다 첫 줄(cd · source)을 먼저 실행합니다.
+새 터미널을 열 때마다 위의 두 줄(cd · source)을 먼저 실행합니다.
 EOF

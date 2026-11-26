@@ -65,7 +65,7 @@ cd ~/rl_shortcut
 
 ```bash
 cd ~/rl_shortcut
-source .venv/bin/activate
+source scripts/env.sh
 python scripts/check_install.py --headless
 ```
 
@@ -81,11 +81,16 @@ python scripts/check_install.py --headless
 
 ```bash
 cd ~/rl_shortcut
-source .venv/bin/activate
+source scripts/env.sh
 ```
 
-- `source .venv/bin/activate` 후: 프롬프트 앞에 `(.venv)` 표시 · `python` · `pip` 이 이 가상환경의 것
-- 이 강의의 명령은 모두 이 상태에서 실행
+- 항상 작업 폴더 `~/rl_shortcut` 으로 먼저 이동 → 학습 결과(`logs/`) · 체크포인트 경로가 모두 이 폴더 기준
+- `env.sh` = 가상환경 활성화 (프롬프트 앞에 `(.venv)` 표시) · 설치한 버전이 검증한 것과 다르면 경고
+- conda · 다른 가상환경은 끄고 ROS 2 의 파이썬 경로는 비움 → 수업 전용 터미널로 사용 · 이 강의의 명령은 모두 이 상태에서 실행
+
+### 실행 결과: 환경 켜기
+
+![env.sh](l02_t_env.png){width=1000}
 
 ## 2. 폴더 구조
 

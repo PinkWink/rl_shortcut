@@ -150,7 +150,8 @@ def off_road(env, margin=0.04):
 ### 터미널: 학습 실행
 
 ```bash
-cd ~/rl_shortcut && source .venv/bin/activate
+cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/train.py --task pinky --headless
 ```
 
@@ -186,6 +187,7 @@ python scripts/train.py --task pinky --headless
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/play.py --task pinky
 ```
 
@@ -202,6 +204,7 @@ python scripts/play.py --task pinky
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/play.py --task pinky --num_envs 1 --perception yolo --enable_cameras
 ```
 

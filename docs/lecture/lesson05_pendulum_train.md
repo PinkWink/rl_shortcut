@@ -11,7 +11,8 @@
 ### 터미널: 학습 실행
 
 ```bash
-cd ~/rl_shortcut && source .venv/bin/activate
+cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/train.py --task pendulum --headless
 ```
 
@@ -56,6 +57,7 @@ ls logs/pendulum/*/
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/play.py --task pendulum
 ```
 

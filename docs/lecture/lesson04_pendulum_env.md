@@ -63,6 +63,7 @@ cfg = UrdfConverterCfg(
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/pendulum_check.py --headless               # arm held, pendulum swings from 30 deg
 python scripts/pendulum_check.py --headless --free_arm    # motor off, the arm moves too
 ```

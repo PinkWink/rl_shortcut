@@ -3,7 +3,8 @@
 ### 터미널: 학습 실행
 
 ```bash
-cd ~/rl_shortcut && source .venv/bin/activate
+cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/train.py --task go2 --headless
 ```
 
@@ -33,6 +34,7 @@ python scripts/train.py --task go2 --headless
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/play.py --task go2
 ```
 
@@ -47,6 +49,7 @@ python scripts/play.py --task go2
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/play.py --task go2 --cmd 1.0 0.0 0.0     # 앞으로 1 m/s
 python scripts/play.py --task go2 --cmd 0.0 0.0 1.0     # 제자리 회전 1 rad/s
 ```
@@ -66,6 +69,7 @@ python scripts/play.py --task go2 --cmd 0.0 0.0 1.0     # 제자리 회전 1 rad
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/play.py --task go2 --cmd 1.0 0.0 0.0 --checkpoint logs/go2/<날짜_시각>/model_100.pt
 ```
 
@@ -82,6 +86,7 @@ python scripts/play.py --task go2 --cmd 1.0 0.0 0.0 --checkpoint logs/go2/<날�
 
 ```bash
 cd ~/rl_shortcut
+source scripts/env.sh
 python scripts/play.py --task go2 --headless --enable_cameras --cmd 1.0 0.0 0.0 --seconds 10 \
     --video outputs/go2_forward.mp4
 ```
