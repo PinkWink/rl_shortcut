@@ -21,25 +21,36 @@ def requirements():
 
 
 def install_flow():
-    fig, ax = fig_ax(16, 3.9)
-    chain(ax, [("① 작업 폴더", ["git 설치 · git clone"]), ("② apt", ["python3.11 · cmake"]),
-               ("③ venv", ["python3.11 -m venv"]), ("④ PyTorch", ["2.7.0 · CUDA 12.8"])],
-          2.2, 1.15, gap=0.4, colors=[C["blue"], C["grey"], C["purple"], C["yellow"]], tfs=12, fs=10)
-    chain(ax, [("⑤ Isaac Sim", ["5.1.0 pip 휠"]), ("⑥ Isaac Lab", ["2.3.2 · rsl_rl · 버전 고정"]),
-               ("⑦ 이 과정", ["pip install -e . · YOLO"]), ("⑧ 확인", ["check_install.py"])],
-          0.4, 1.15, gap=0.4, colors=[C["red"], C["teal"], C["blue"], C["green"]], tfs=12, fs=10)
-    xr, xl = 0.3 + 3 * 3.95 + 1.775, 0.3 + 1.775
-    ax.plot([xr, xr, xl], [2.2, 1.85, 1.85], color=INK, lw=1.4)
-    arrow(ax, (xl, 1.85), (xl, 1.55))
-    note(ax, 0.3, 3.65, "이 PC 실측: ④ 2분 21초  ·  ⑤ 5분 26초  ·  ⑥ 30초  (인터넷 속도에 따라 달라짐)", fs=10)
+    fig, ax = fig_ax(16, 2.6)
+    chain(ax, [("① 저장소 받기", ["git 설치 · git clone"]), ("② 설치 스크립트", ["./scripts/install.sh  (약 20분)"]),
+               ("③ 설치 확인", ["check_install.py"])],
+          0.5, 1.35, gap=0.5, colors=[C["blue"], C["teal"], C["green"]], tfs=12.5, fs=10.5)
+    note(ax, 0.3, 2.3, "검증: 새로 설치한 Ubuntu 24.04 에서 ① ~ ③ 약 20분 (인터넷 속도에 따라 달라짐)", fs=10)
     save(fig, "l02_install_flow.png")
+
+
+def install_steps():
+    fig, ax = fig_ax(16, 5.3)
+    rows = [("1  apt 패키지", "python3.11 (deadsnakes PPA) · venv · dev · cmake · build-essential", C["grey"]),
+            ("2  가상환경", ".venv = Python 3.11 (Isaac Sim 5.1 은 3.11 에서만 동작)", C["purple"]),
+            ("3  PyTorch", "torch 2.7.0 · torchvision 0.22.0 (CUDA 12.8 → RTX 50 시리즈도 동작)", C["yellow"]),
+            ("4  Isaac Sim", "isaacsim[all,extscache] 5.1.0 pip 휠 (소스 빌드 없음)", C["red"]),
+            ("5  Isaac Lab", "v2.3.2 소스 + RSL-RL · constraints.txt 로 버전 고정", C["teal"]),
+            ("6  이 과정", "pip install -e . (rl_shortcut) · YOLO (ultralytics 8.4.218)", C["blue"]),
+            ("7  버전 확인", "torch · numpy · tensordict · rsl-rl-lib · isaacsim · ultralytics", C["green"])]
+    for i, (name, what, fc) in enumerate(rows):
+        y = 4.5 - i * 0.66
+        rbox(ax, 0.3, y, 3.6, 0.54, name, fc=fc, tfs=10.5, lw=1.0)
+        rbox(ax, 4.1, y, 11.6, 0.54, what, fc="white", tfs=10, lw=1.0)
+    note(ax, 0.3, 0.15, "단계마다 이미 설치된 것은 건너뜀 · 실패하면 그 자리에서 멈추고 무엇을 할지 알려 줌")
+    save(fig, "l02_install_steps.png")
 
 
 def folders():
     fig, ax = fig_ax(16, 6.66)
     rows = [("~/rl_shortcut/", "작업 폴더 = 이 과정의 git 저장소", C["blue"]),
             ("  .venv/", "Python 3.11 venv: PyTorch · Isaac Sim · Isaac Lab (약 18 GB)", C["purple"]),
-            ("  IsaacLab/", "Isaac Lab 2.3.2 소스 (⑥ 에서 git clone)", C["teal"]),
+            ("  IsaacLab/", "Isaac Lab 2.3.2 소스 (install.sh 가 git clone)", C["teal"]),
             ("  rl_shortcut/", "환경 코드: pendulum_env · pinky_env · go2_env · g1_env · ppo", C["yellow"]),
             ("  scripts/", "실행 파일: train · play · 물리 실험 · Pinky · Go2 · G1", C["yellow"]),
             ("  assets/ · motions/", "역진자 키트 · Pinky Pro · 핑크시티 (USD) · G1 레퍼런스 동작 2개", C["green"]),
@@ -55,8 +66,9 @@ def folders():
 
 
 def scripts_map():
-    fig, ax = fig_ax(16, 8.36)
-    rows = [("check_install.py", "버전 · GPU · 물리 100 스텝 확인", "②", C["green"]),
+    fig, ax = fig_ax(16, 9.04)
+    rows = [("install.sh", "한 번에 설치 (apt · venv · pip · Isaac Lab)", "②", C["green"]),
+            ("check_install.py", "버전 · GPU · 물리 100 스텝 확인", "②", C["green"]),
             ("physics_drop.py", "공 3개 낙하: 반발 계수 · dt", "③", C["blue"]),
             ("physics_parallel.py", "Go2 N 대 병렬 물리 속도", "③", C["blue"]),
             ("pendulum_check.py", "키트 진자 흔들림 주기 vs 이론", "④", C["teal"]),
@@ -68,25 +80,25 @@ def scripts_map():
             ("go2_stand.py", "PD 모터로 서 있기 (kp 비교)", "⑧", C["yellow"]),
             ("g1_motion.py", "G1 레퍼런스 동작 재생", "⑪⑫", C["red"])]
     for i, (name, what, page, fc) in enumerate(rows):
-        y = 7.49 - i * 0.68
+        y = 8.17 - i * 0.68
         rbox(ax, 0.3, y, 6.4, 0.56, name, fc=fc, tfs=10.5, lw=1.0)
         rbox(ax, 6.9, y, 6.9, 0.56, what, fc="white", tfs=10, lw=1.0)
         rbox(ax, 14.0, y, 1.7, 0.56, page, fc=C["grey"], tfs=10.5, lw=1.0)
-    note(ax, 0.3, 8.24, "scripts/ 아래 스크립트", bold=True, color=INK, fs=11)
-    note(ax, 6.9, 8.24, "하는 일", bold=True, color=INK, fs=11)
-    note(ax, 14.0, 8.24, "페이지", bold=True, color=INK, fs=11)
+    note(ax, 0.3, 8.92, "scripts/ 아래 스크립트", bold=True, color=INK, fs=11)
+    note(ax, 6.9, 8.92, "하는 일", bold=True, color=INK, fs=11)
+    note(ax, 14.0, 8.92, "페이지", bold=True, color=INK, fs=11)
     save(fig, "l02_scripts_map.png")
 
 
 def troubleshoot():
     fig, ax = fig_ax(16, 6.56)
-    rows = [("Unable to locate package python3.11", "deadsnakes PPA 없음", "② add-apt-repository 먼저"),
-            ("fatal: destination path '.' already exists ...", "폴더가 비어 있지 않음", "ls -a 확인 후 비우고 다시"),
-            ("No module named 'isaaclab'", "venv 활성화 안 됨 · ⑥ 실패", "source .venv/bin/activate · ⑥ 다시"),
+    rows = [("디스크 여유가 ... GB 입니다. 30 GB 이상 필요합니다.", "설치에 30 GB 필요", "공간을 비우고 install.sh 다시"),
+            ("fatal: destination path 'rl_shortcut' already exists", "이미 받은 폴더가 있음", "cd ~/rl_shortcut 후 ② 부터"),
+            ("No module named 'isaaclab'", "venv 활성화 안 됨 · 설치 중단", "source .venv/bin/activate · install.sh 다시"),
             ("Do you accept the EULA? (Yes/No)", "첫 실행 라이선스 확인", "Yes 입력 (한 번만)"),
-            ("CUDA error: no kernel image is available", "torch 가 CUDA 12.8 빌드가 아님", "④ 명령의 --index-url 확인"),
-            ("ImportError: cannot import name 'is_structseq_instance'", "패키지가 최신 버전으로 설치됨", "⑥ 을 export 두 줄과 함께 다시"),
-            ("503 Service Unavailable (apt install)", "PPA 서버가 잠시 응답 없음", "② 의 apt install 다시 실행")]
+            ("CUDA error: no kernel image is available", "torch 가 CUDA 12.8 빌드가 아님", "rm -rf .venv 후 install.sh 다시"),
+            ("ImportError: cannot import name 'is_structseq_instance'", "패키지를 따로 올려 버전이 바뀜", "rm -rf .venv 후 install.sh 다시"),
+            ("503 Service Unavailable (apt install)", "PPA 서버가 잠시 응답 없음", "./scripts/install.sh 다시 실행")]
     x = [0.3, 7.6, 11.0]; w = [7.1, 3.2, 4.7]
     for j, t in enumerate(["증상 (메시지)", "원인", "해결"]):
         rbox(ax, x[j], 5.71, w[j], 0.6, t, fc=[C["grey"], C["yellow"], C["green"]][j], tfs=11)
@@ -98,5 +110,5 @@ def troubleshoot():
 
 
 if __name__ == "__main__":
-    for f in (requirements, install_flow, folders, scripts_map, troubleshoot):
+    for f in (requirements, install_flow, install_steps, folders, scripts_map, troubleshoot):
         f()

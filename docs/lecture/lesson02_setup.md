@@ -8,128 +8,84 @@
 
 ![설치 순서](l02_install_flow.png){width=1000}
 
+- 세 단계를 순서대로 한 번만 수행 · 약 20분 (인터넷 속도에 따라 달라짐)
 - 모든 것을 `~/rl_shortcut` 폴더 하나에 설치 → 이 폴더를 지우면 설치한 것이 모두 사라짐
-- 내려받는 양: PyTorch 약 3.9 GB · Isaac Sim 약 4.7 GB · 설치 후 venv 약 18 GB
 - 설치를 시작해 두고 다음 설명을 들어도 됨
 
 ## 1. 설치
 
-### 터미널: ① 작업 폴더 만들기
+### 터미널: ① 저장소 받기
 
 ```bash
+cd ~
 sudo apt update
 sudo apt install -y git
-mkdir -p ~/rl_shortcut
-cd ~/rl_shortcut
-git clone https://github.com/PinkWink/rl_shortcut.git .
+git clone https://github.com/PinkWink/rl_shortcut.git
+cd rl_shortcut
 ls
 ```
 
-- 마지막 `.` = "지금 폴더에 받기" → `~/rl_shortcut/rl_shortcut` 처럼 한 단계 더 생기지 않음
-- `git clone ... .` 은 빈 폴더에서만 가능 · 파일이 있으면 `ls -a` 로 확인하고 비운 뒤 다시 실행
 - 새로 설치한 Ubuntu 에는 `git` 없음 → 먼저 설치
+- `~/rl_shortcut` 폴더 생성 = 이 과정의 작업 폴더
 
-### 실행 결과: 작업 폴더
+### 실행 결과: 저장소 받기
 
-![mkdir 와 git clone](l02_t_clone.png){width=1000}
+![git clone](l02_t_clone.png){width=1000}
 
-### 터미널: ② apt 패키지 (Python 3.11)
-
-```bash
-sudo add-apt-repository -y ppa:deadsnakes/ppa
-sudo apt update
-sudo apt install -y python3.11 python3.11-venv python3.11-dev git cmake build-essential
-python3.11 --version
-```
-
-- Isaac Sim 5.1 은 **Python 3.11** 에서만 동작
-- Ubuntu 24.04 의 기본 파이썬은 3.12 → 3.11 을 따로 설치 (deadsnakes PPA)
-- 시스템 파이썬(3.12)은 그대로 · 3.11 은 `python3.11` 이라는 이름으로만 호출
-
-### 터미널: ③ venv 만들기
+### 터미널: ② 설치 스크립트
 
 ```bash
 cd ~/rl_shortcut
-python3.11 -m venv .venv
+./scripts/install.sh
+```
+
+- 수행 순서: apt 패키지 → 가상환경 → PyTorch → Isaac Sim → Isaac Lab → 이 과정의 패키지 → 버전 확인
+- 시작할 때 sudo 비밀번호 질문 (apt 패키지 설치)
+- 마지막에 "설치 완료" 출력 시 성공
+
+### 실행 결과: 설치 스크립트
+
+![install.sh 끝부분: 버전 확인 → 설치 완료](l02_t_install.png){width=1000}
+
+### 설치 스크립트: 주의할 점
+
+- 여러 번 실행해도 안전 → 네트워크 끊김 등으로 멈추면 같은 명령을 다시 실행 (설치된 것은 건너뜀 · 두 번째부터 약 20초)
+- conda 가 켜진 터미널도 가능 (가상환경은 항상 `python3.11` 로 생성)
+- 설치 후 `pip install --upgrade ...` 로 패키지를 올리지 말 것 → 검증한 버전이 바뀌어 실습 코드에서 `ImportError` 발생
+
+### install.sh 가 하는 일
+
+![install.sh 단계](l02_install_steps.png){width=1000}
+
+- Isaac Sim 5.1 은 **Python 3.11** 에서만 동작 · Ubuntu 24.04 의 기본은 3.12 → 3.11 을 따로 설치 (시스템 파이썬은 그대로)
+- `constraints.txt` = 이 과정에서 검증한 패키지 버전 211개 → 언제 설치해도 같은 버전
+- 내려받는 양: PyTorch 약 3.9 GB · Isaac Sim 약 4.7 GB · 설치 후 `.venv` 약 18 GB
+
+### 터미널: ③ 설치 확인
+
+```bash
+cd ~/rl_shortcut
 source .venv/bin/activate
-pip install --upgrade pip
-python --version
-```
-
-- `source .venv/bin/activate` 후: 프롬프트 앞에 `(.venv)` 표시 · `python` · `pip` 이 이 venv 의 것
-- 새 터미널마다 먼저 `cd ~/rl_shortcut && source .venv/bin/activate`
-- 이 강의의 명령은 모두 이 상태에서 실행
-
-### 터미널: ④ PyTorch (CUDA 12.8)
-
-```bash
-cd ~/rl_shortcut
-pip install torch==2.7.0 torchvision==0.22.0 --index-url https://download.pytorch.org/whl/cu128
-```
-
-- Isaac Lab 2.3 이 맞춰 둔 버전
-- CUDA 12.8 빌드 → RTX 50 시리즈(Blackwell)에서도 동작
-
-### 터미널: ⑤ Isaac Sim 5.1.0 (pip)
-
-```bash
-cd ~/rl_shortcut
-pip install "isaacsim[all,extscache]==5.1.0" --extra-index-url https://pypi.nvidia.com
-```
-
-- 소스 빌드 없이 pip 휠로 설치
-- `all` = Isaac Sim 의 모든 확장 · `extscache` = 확장을 미리 받아 둔 묶음
-
-### 실행 결과: pip 설치
-
-![PyTorch 와 Isaac Sim 설치](l02_t_pip.png){width=1000}
-
-### 터미널: ⑥ Isaac Lab 2.3.2
-
-```bash
-cd ~/rl_shortcut
-git clone --depth 1 --branch v2.3.2 https://github.com/isaac-sim/IsaacLab.git
-cd IsaacLab
-export PIP_CONSTRAINT=~/rl_shortcut/constraints.txt
-export PIP_BUILD_CONSTRAINT=$PIP_CONSTRAINT
-./isaaclab.sh --install rsl_rl
-cd ..
-```
-
-- Isaac Lab = Isaac Sim 위의 로봇 학습 프레임워크 · `--install rsl_rl` = Isaac Lab 확장 + 강화학습 라이브러리 RSL-RL 만 설치
-- `export` 두 줄 = 이 과정에서 검증한 패키지 버전(`constraints.txt`)으로 고정 · 빼면 최신 버전이 설치되어 실습 코드에서 `ImportError` 발생
-- 마지막에 NVIDIA Omniverse 라이선스(EULA) 동의 질문 → `Yes` 입력 · 한 번 동의하면 다시 묻지 않음
-
-### 실행 결과: Isaac Lab 설치의 끝
-
-![isaaclab.sh --install rsl_rl](l02_t_isaaclab.png){width=1000}
-
-### 터미널: ⑦ 이 과정의 패키지
-
-```bash
-cd ~/rl_shortcut
-pip install -e . -c constraints.txt
-pip install --no-deps -c constraints.txt ultralytics==8.4.218 ultralytics-thop polars polars-runtime-32
-```
-
-- `rl_shortcut/` 폴더의 환경 코드(역진자 · Pinky Pro · Go2 · G1)를 `import rl_shortcut` 으로 사용 가능 · `-e` → 코드를 고치면 바로 반영
-- 둘째 줄 = ⑥ 페이지의 YOLO(ultralytics) · `-c constraints.txt` = 검증한 버전으로 고정
-- `--no-deps` 필수 · 빼면 numpy 가 2.x 로 바뀌어 Isaac Sim 이 동작하지 않음
-
-### 터미널: ⑧ 설치 확인
-
-```bash
-cd ~/rl_shortcut
 python scripts/check_install.py --headless
 ```
 
-- `--headless` = 창 없이 실행
-- 화면이 필요 없는 확인 · 학습은 이 옵션으로 빠르게 실행
+- 처음 실행할 때 NVIDIA Omniverse 라이선스(EULA) 동의 질문 → `Yes` 입력 · 한 번 동의하면 다시 묻지 않음
+- `--headless` = 창 없이 실행 · 학습도 이 옵션으로 빠르게 실행
 - `course code ... import OK` = 네 로봇의 실습 코드를 불러오는 데 성공 → 준비 끝
 
 ### 실행 결과: 설치 확인
 
 ![check_install.py](l02_t_check.png){width=1000}
+
+### 터미널: 새 터미널을 열 때마다
+
+```bash
+cd ~/rl_shortcut
+source .venv/bin/activate
+```
+
+- `source .venv/bin/activate` 후: 프롬프트 앞에 `(.venv)` 표시 · `python` · `pip` 이 이 가상환경의 것
+- 이 강의의 명령은 모두 이 상태에서 실행
 
 ## 2. 폴더 구조
 
