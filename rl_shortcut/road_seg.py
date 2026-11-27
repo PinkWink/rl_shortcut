@@ -12,7 +12,12 @@ from rl_shortcut import CHECKPOINT_DIR, LOG_DIR, pink_city
 CLASSES = ["road", "sidewalk"]
 
 
+WEIGHTS = None      # set by --weights (play.py, pinky_yolo.py): use this file instead of the newest training result
+
+
 def seg_weights():
+    if WEIGHTS is not None:
+        return WEIGHTS
     runs = sorted(LOG_DIR.glob("pinky_yolo/*/weights/best.pt"), key=lambda p: p.parent.parent.name)
     if runs:
         return runs[-1]

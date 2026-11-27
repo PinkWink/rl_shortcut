@@ -66,7 +66,7 @@ def folders():
 
 
 def scripts_map():
-    fig, ax = fig_ax(16, 9.72)
+    fig, ax = fig_ax(16, 10.40)
     rows = [("install.sh", "한 번에 설치 (apt · venv · pip · Isaac Lab)", "②", C["green"]),
             ("env.sh", "새 터미널마다 source: 가상환경 활성화 · 버전 확인", "②", C["green"]),
             ("check_install.py", "버전 · GPU · 물리 100 스텝 확인", "②", C["green"]),
@@ -77,17 +77,18 @@ def scripts_map():
             ("pinky_yolo.py", "YOLO 세그먼테이션 학습 · 확인", "⑥", C["purple"]),
             ("train.py --task pendulum | pinky | go2 | g1", "PPO 학습 → logs/<실험>/", "⑤⑦⑩⑪⑫", C["purple"]),
             ("play.py --task ...", "학습한 정책 실행 · 평가 · 영상", "⑤⑦⑩⑪⑫", C["purple"]),
+            ("get_model.sh <이름>.pt", "강사에게 받은 모델: 다운로드 폴더 → models/", "⑤⑥⑦⑩⑪⑫", C["purple"]),
             ("go2_inspect.py", "go2.usd 의 링크 · 관절 · 순서", "⑧", C["yellow"]),
             ("go2_stand.py", "PD 모터로 서 있기 (kp 비교)", "⑧", C["yellow"]),
             ("g1_motion.py", "G1 레퍼런스 동작 재생", "⑪⑫", C["red"])]
     for i, (name, what, page, fc) in enumerate(rows):
-        y = 8.85 - i * 0.68
+        y = 9.53 - i * 0.68
         rbox(ax, 0.3, y, 6.4, 0.56, name, fc=fc, tfs=10.5, lw=1.0)
         rbox(ax, 6.9, y, 6.9, 0.56, what, fc="white", tfs=10, lw=1.0)
         rbox(ax, 14.0, y, 1.7, 0.56, page, fc=C["grey"], tfs=10.5, lw=1.0)
-    note(ax, 0.3, 9.60, "scripts/ 아래 스크립트", bold=True, color=INK, fs=11)
-    note(ax, 6.9, 9.60, "하는 일", bold=True, color=INK, fs=11)
-    note(ax, 14.0, 9.60, "페이지", bold=True, color=INK, fs=11)
+    note(ax, 0.3, 10.28, "scripts/ 아래 스크립트", bold=True, color=INK, fs=11)
+    note(ax, 6.9, 10.28, "하는 일", bold=True, color=INK, fs=11)
+    note(ax, 14.0, 10.28, "페이지", bold=True, color=INK, fs=11)
     save(fig, "l02_scripts_map.png")
 
 

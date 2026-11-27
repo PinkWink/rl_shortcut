@@ -20,6 +20,7 @@ p = argparse.ArgumentParser()
 p.add_argument("--data", default="datasets/pinky_road")
 p.add_argument("--epochs", type=int, default=40)
 p.add_argument("--check", action="store_true")
+p.add_argument("--weights", default=None, help="--check: these weights instead of the newest training result")
 args = p.parse_args()
 
 
@@ -36,7 +37,7 @@ def train():
 
 def check(count=6):
     """Validation images: camera | YOLO road mask | the 8 x 16 road view the policy gets."""
-    seg = RoadSeg()
+    seg = RoadSeg(args.weights)
     files = sorted((ROOT / args.data / "images/val").glob("*.jpg"))[:count]
     rows, ious = [], []
     for f in files:

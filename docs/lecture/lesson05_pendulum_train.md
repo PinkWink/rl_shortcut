@@ -133,7 +133,32 @@ def make_runner_cfg(args):
 - 기본값 0.005: 잡음이 40 iteration 만에 0.03 아래로 감소 → 학습이 출렁임 (다 세우던 정책이 다시 쓰러뜨리기도 함)
 - 300 iteration 비교 · 100 iteration 이후 가장 짧았던 에피소드 길이: 0.005 → 283 스텝 · 0.01 → 442 스텝
 
-## 4. 해 볼 것
+## 4. 학습을 못 했다면
+
+### 강사가 배포한 모델 받기
+
+- 학습이 중간에 끊기면 덜 학습된 모델이 `logs/` 에 남고 다음 단계가 그것을 사용 → 강사가 배포한 `pendulum.pt` 로 진행 (이 페이지 아래 댓글의 첨부 파일)
+- 브라우저로 내려받으면 다운로드 폴더에 저장됨 (`~/Downloads` · 한글 Ubuntu 는 `~/다운로드`)
+- 내려받을 수 없을 때: 저장소에 같은 모델 포함 → `--checkpoint checkpoints/pendulum.pt`
+
+### 터미널: 받은 모델로 실행
+
+```bash
+cd ~/rl_shortcut
+source scripts/env.sh
+./scripts/get_model.sh pendulum.pt
+python scripts/play.py --task pendulum --checkpoint models/pendulum.pt
+```
+
+- `get_model.sh` = 다운로드 폴더의 파일을 작업 폴더의 `models/` 로 복사 (`~/rl_shortcut/models/pendulum.pt`)
+- `--checkpoint models/pendulum.pt` = 이 파일의 정책으로 실행 · 출력의 `[play] models/pendulum.pt` 로 확인
+- 이 페이지의 다른 `play.py` 명령에도 같은 옵션을 붙여 실행
+
+### 실행 결과: 받은 모델
+
+![get_model.sh 와 받은 모델로 실행](l05_t_model.png){width=1000}
+
+## 5. 해 볼 것
 
 ### 보상 · 행동 · 관측을 바꿔 보기
 

@@ -10,6 +10,8 @@
 
 --checkpoint: a .pt path or an experiment name (pendulum, go2, g1_walk, g1_bruce_lee).
 By name it takes the newest logs/<name>/*/model_*.pt, else the shipped checkpoints/<name>.pt.
+A model received from the instructor (scripts/get_model.sh): --checkpoint models/go2.pt
+--weights: pinky with --perception yolo: the YOLO weights, instead of the newest logs/pinky_yolo/*/weights/best.pt.
 """
 import argparse
 
@@ -20,6 +22,7 @@ p.add_argument("--task", required=True, choices=["pendulum", "pinky", "go2", "g1
 p.add_argument("--motion", default="walk", help="g1 only: motions/<motion>.npz")
 p.add_argument("--perception", default="map", choices=["map", "yolo"], help="pinky only: where the road view comes from")
 p.add_argument("--checkpoint", default=None)
+p.add_argument("--weights", default=None, help="pinky --perception yolo: YOLO weights (.pt)")
 p.add_argument("--num_envs", type=int, default=16)
 p.add_argument("--cmd", type=float, nargs=3, default=None, metavar=("VX", "VY", "WZ"), help="go2 only")
 p.add_argument("--seconds", type=float, default=None, help="stop after this many simulated seconds")
@@ -55,6 +58,13 @@ def main():
         else latest_checkpoint(args.checkpoint or runner_cfg.experiment_name)
     if ckpt is None:
         raise SystemExit(f"no checkpoint for {args.checkpoint or runner_cfg.experiment_name}: train first")
+    if not ckpt.is_file():
+        raise SystemExit(f"no such file: {ckpt.resolve()}  (run from ~/rl_shortcut; a received model: scripts/get_model.sh)")
+    if args.weights:
+        from rl_shortcut import road_seg
+        road_seg.WEIGHTS = Path(args.weights)
+        if not road_seg.WEIGHTS.is_file():
+            raise SystemExit(f"no such file: {road_seg.WEIGHTS.resolve()}  (run from ~/rl_shortcut)")
 
     env = ManagerBasedRLEnv(cfg=env_cfg, render_mode="rgb_array" if args.video else None)
     wrapped = RslRlVecEnvWrapper(env)

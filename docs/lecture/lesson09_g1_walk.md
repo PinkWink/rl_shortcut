@@ -210,7 +210,32 @@ python scripts/play.py --task g1 --motion walk
 - 100 iteration 정책: 넘어지지는 않지만 자세가 레퍼런스와 꽤 다름 (0.275 rad ≈ 16°)
 - 300 iteration: 5.5° → 눈으로 보기에 이미 사람처럼 걸음
 
-## 6. 해 볼 것
+## 6. 학습을 못 했다면
+
+### 강사가 배포한 모델 받기
+
+- 학습이 중간에 끊기면 덜 학습된 모델이 `logs/` 에 남고 다음 단계가 그것을 사용 → 강사가 배포한 `g1_walk.pt` 로 진행 (이 페이지 아래 댓글의 첨부 파일)
+- 브라우저로 내려받으면 다운로드 폴더에 저장됨 (`~/Downloads` · 한글 Ubuntu 는 `~/다운로드`)
+- 내려받을 수 없을 때: 저장소에 같은 모델 포함 → `--checkpoint checkpoints/g1_walk.pt`
+
+### 터미널: 받은 모델로 실행
+
+```bash
+cd ~/rl_shortcut
+source scripts/env.sh
+./scripts/get_model.sh g1_walk.pt
+python scripts/play.py --task g1 --motion walk --checkpoint models/g1_walk.pt
+```
+
+- `get_model.sh` = 다운로드 폴더의 파일을 작업 폴더의 `models/` 로 복사 (`~/rl_shortcut/models/g1_walk.pt`)
+- `--checkpoint models/g1_walk.pt` = 이 파일의 정책으로 실행 · 출력의 `[play] models/g1_walk.pt` 로 확인
+- ⑫ 페이지의 걷기 정책 + 쿵푸 레퍼런스: `--checkpoint g1_walk` 대신 `--checkpoint models/g1_walk.pt`
+
+### 실행 결과: 받은 모델
+
+![get_model.sh 와 받은 모델로 실행](l09_t_model.png){width=1000}
+
+## 7. 해 볼 것
 
 - `--max_iterations 300` 으로 짧게 학습한 정책과 2000 iteration 정책을 `play.py` 로 비교
 - `RewardsCfg` 의 `arms` 가중치를 0 으로 바꾸면 팔 흔들기가 어떻게 되는지 확인

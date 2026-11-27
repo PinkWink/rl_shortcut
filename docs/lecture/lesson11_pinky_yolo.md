@@ -172,9 +172,28 @@ for i, r in enumerate(results):
 
 ## 6. 학습을 못 했다면
 
-- 이 페이지의 학습 결과 `pinky_road_seg.pt` = 이 페이지 아래 댓글의 첨부 파일 (저장소에는 없음)
-- 받아서 `~/rl_shortcut/checkpoints/pinky_road_seg.pt` 로 저장
-- `logs/pinky_yolo/` 가 없으면 자동으로 이 파일 사용
+### 강사가 배포한 모델 받기
+
+- 학습이 중간에 끊기면 덜 학습된 모델이 `logs/` 에 남고 다음 단계가 그것을 사용 → 강사가 배포한 `pinky_road_seg.pt` 로 진행 (이 페이지 아래 댓글의 첨부 파일)
+- 브라우저로 내려받으면 다운로드 폴더에 저장됨 (`~/Downloads` · 한글 Ubuntu 는 `~/다운로드`)
+- 이 파일은 저장소에 없음 → YOLO 학습을 끝내지 못했으면 반드시 내려받기
+
+### 터미널: 받은 모델로 실행
+
+```bash
+cd ~/rl_shortcut
+source scripts/env.sh
+./scripts/get_model.sh pinky_road_seg.pt
+python scripts/pinky_yolo.py --check --weights models/pinky_road_seg.pt
+```
+
+- `get_model.sh` = 다운로드 폴더의 파일을 작업 폴더의 `models/` 로 복사 (`~/rl_shortcut/models/pinky_road_seg.pt`)
+- `--weights models/pinky_road_seg.pt` = 이 파일의 YOLO 로 실행 · 출력의 `[yolo] models/pinky_road_seg.pt` 로 확인
+- ⑦ 페이지의 `--perception yolo` 명령에도 같은 `--weights` 옵션을 붙여 실행
+
+### 실행 결과: 받은 모델
+
+![get_model.sh 와 받은 모델로 실행](l11_t_model.png){width=1000}
 
 ## 7. 해 볼 것
 

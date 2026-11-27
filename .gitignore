@@ -6,6 +6,7 @@ __pycache__/
 *.egg-info/
 docs/lecture/raw/
 datasets/
+models/
 runs/
 /yolo*.pt
 /checkpoints/pinky_road_seg.pt

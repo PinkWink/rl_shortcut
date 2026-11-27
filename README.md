@@ -28,6 +28,7 @@ python scripts/check_install.py --headless      # answer Yes to the EULA on the 
 | `scripts/go2_inspect.py`, `scripts/go2_stand.py` | Go2 USD contents, PD motors holding the standing pose |
 | `scripts/g1_motion.py --motion walk\|bruce_lee` | play a G1 reference clip (no physics control) |
 | `scripts/train.py --task pendulum\|pinky\|go2\|g1 [--motion ...]` | PPO (RSL-RL) training into `logs/<experiment>/<date_time>/` |
+| `scripts/get_model.sh go2.pt` | a model received from the instructor: download folder → `models/`; then `play.py --checkpoint models/go2.pt` |
 | `scripts/play.py --task ... [--checkpoint name\|path]` | run a policy, print falls and tracking |
 | `scripts/play.py --task pinky --perception yolo --enable_cameras` | the Pinky policy driven by its camera + YOLO instead of the floor map |
 

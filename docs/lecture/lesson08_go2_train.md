@@ -122,8 +122,28 @@ while app.is_running() and (steps is None or step < steps):
 
 ## 5. 학습을 못 했다면
 
-- 저장소의 `checkpoints/go2.pt` = 이 페이지의 학습 결과
-- `logs/go2/` 가 없으면 `play.py` 가 자동으로 이 파일 사용
+### 강사가 배포한 모델 받기
+
+- 학습이 중간에 끊기면 덜 학습된 모델이 `logs/` 에 남고 다음 단계가 그것을 사용 → 강사가 배포한 `go2.pt` 로 진행 (이 페이지 아래 댓글의 첨부 파일)
+- 브라우저로 내려받으면 다운로드 폴더에 저장됨 (`~/Downloads` · 한글 Ubuntu 는 `~/다운로드`)
+- 내려받을 수 없을 때: 저장소에 같은 모델 포함 → `--checkpoint checkpoints/go2.pt`
+
+### 터미널: 받은 모델로 실행
+
+```bash
+cd ~/rl_shortcut
+source scripts/env.sh
+./scripts/get_model.sh go2.pt
+python scripts/play.py --task go2 --checkpoint models/go2.pt
+```
+
+- `get_model.sh` = 다운로드 폴더의 파일을 작업 폴더의 `models/` 로 복사 (`~/rl_shortcut/models/go2.pt`)
+- `--checkpoint models/go2.pt` = 이 파일의 정책으로 실행 · 출력의 `[play] models/go2.pt` 로 확인
+- 이 페이지의 다른 `play.py` 명령(`--cmd` · `--video`)에도 같은 옵션을 붙여 실행
+
+### 실행 결과: 받은 모델
+
+![get_model.sh 와 받은 모델로 실행](l08_t_model.png){width=1000}
 
 ## 6. 해 볼 것
 

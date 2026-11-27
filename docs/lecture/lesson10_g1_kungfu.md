@@ -63,7 +63,7 @@ python scripts/train.py --task g1 --motion bruce_lee --headless
 
 - 코드는 한 줄도 바꾸지 않음 · 같은 보상 · 같은 관측 · 같은 PPO 설정에 레퍼런스만 쿵푸
 - 3000 iteration · 이 PC 에서 **43.6분** · 걷기(2000 it)보다 동작이 길고 다양해 더 오래 학습
-- 수업에서는 학습을 시작해 두고 처음 몇 분의 로그 변화를 본 뒤 `checkpoints/g1_bruce_lee.pt` 로 다음 절 진행
+- 수업에서는 학습을 시작해 두고 처음 몇 분의 로그 변화를 본 뒤 중단 → 다음 절은 받은 모델로 진행 (5절: `--checkpoint models/g1_bruce_lee.pt`)
 
 ### 실행 결과: 마지막 iteration
 
@@ -121,7 +121,34 @@ python scripts/play.py --task g1 --motion bruce_lee
 - 쿵푸 정책의 오차(0.198 rad) > 걷기 정책(0.074 rad)
 - 더 어려운 동작은 더 오래 학습해도 완벽히 따라 하지는 못함
 
-## 5. 정리
+## 5. 학습을 못 했다면
+
+### 강사가 배포한 모델 받기
+
+- 학습이 중간에 끊기면 덜 학습된 모델이 `logs/` 에 남고 다음 단계가 그것을 사용 → 강사가 배포한 `g1_walk.pt` · `g1_bruce_lee.pt` 로 진행 (이 페이지 아래 댓글의 첨부 파일)
+- 브라우저로 내려받으면 다운로드 폴더에 저장됨 (`~/Downloads` · 한글 Ubuntu 는 `~/다운로드`)
+- 내려받을 수 없을 때: 저장소에 같은 모델 포함 → `--checkpoint checkpoints/g1_walk.pt` · `checkpoints/g1_bruce_lee.pt`
+
+### 터미널: 받은 모델로 실행
+
+```bash
+cd ~/rl_shortcut
+source scripts/env.sh
+./scripts/get_model.sh g1_walk.pt
+./scripts/get_model.sh g1_bruce_lee.pt
+python scripts/play.py --task g1 --motion bruce_lee --checkpoint models/g1_walk.pt
+python scripts/play.py --task g1 --motion bruce_lee --checkpoint models/g1_bruce_lee.pt
+```
+
+- `get_model.sh` = 다운로드 폴더의 파일을 작업 폴더의 `models/` 로 복사 (`~/rl_shortcut/models/g1_walk.pt`)
+- 첫 명령 = 걷기 정책 + 쿵푸 레퍼런스 (2절) · 둘째 명령 = 쿵푸 정책 + 쿵푸 레퍼런스 (4절)
+- 출력의 `[play] models/...` 로 어느 모델인지 확인
+
+### 실행 결과: 받은 모델
+
+![get_model.sh 와 받은 모델로 실행](l10_t_model.png){width=1000}
+
+## 6. 정리
 
 ### 이 과정에서 한 것
 

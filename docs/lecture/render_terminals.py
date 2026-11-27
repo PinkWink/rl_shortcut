@@ -311,6 +311,32 @@ def g1_bruce():
            "l10_t_play_bruce.png", prompt=V, highlight=("12 s x 64 envs",))
 
 
+def models():
+    """scripts/get_model.sh: a model received from the instructor, then play.py / pinky_yolo.py with it."""
+    def got(name, size):
+        return [("prompt", f"./scripts/get_model.sh {name}"),
+                ("out", f"가져왔습니다: /home/pw/Downloads/{name}"),
+                ("out", f"        →  /home/pw/rl_shortcut/models/{name}  ({size})"),
+                ("out", "  ...")]
+    pages = [("l05_t_model.png", got("pendulum.pt", "48K"),
+              "python scripts/play.py --task pendulum --checkpoint models/pendulum.pt", "[play] models/pendulum.pt"),
+             ("l11_t_model.png", got("pinky_road_seg.pt", "5.8M"),
+              "python scripts/pinky_yolo.py --check --weights models/pinky_road_seg.pt", "[yolo] models/pinky_road_seg.pt"),
+             ("l12_t_model.png", got("pinky.pt", "612K"),
+              "python scripts/play.py --task pinky --checkpoint models/pinky.pt", "[play] models/pinky.pt"),
+             ("l08_t_model.png", got("go2.pt", "968K"),
+              "python scripts/play.py --task go2 --checkpoint models/go2.pt", "[play] models/go2.pt"),
+             ("l09_t_model.png", got("g1_walk.pt", "1.7M"),
+              "python scripts/play.py --task g1 --motion walk --checkpoint models/g1_walk.pt", "[play] models/g1_walk.pt"),
+             ("l10_t_model.png", got("g1_walk.pt", "1.7M") + got("g1_bruce_lee.pt", "1.7M"),
+              "python scripts/play.py --task g1 --motion bruce_lee --checkpoint models/g1_bruce_lee.pt",
+              "[play] models/g1_bruce_lee.pt")]
+    for name, lines, command, first in pages:
+        render(lines + [("prompt", command), ("out", "  ... (Isaac Sim 시작 로그) ..." if "play.py" in command else "  ..."),
+                        ("out", first)],
+               name, prompt=V, highlight=("가져왔습니다", "→", "[play]", "[yolo]"))
+
+
 if __name__ == "__main__":
-    for f in (setup, physics, pendulum_check, pendulum, pinky, go2, g1_motion, g1_walk, g1_bruce):
+    for f in (setup, physics, pendulum_check, pendulum, pinky, go2, g1_motion, g1_walk, g1_bruce, models):
         f()
